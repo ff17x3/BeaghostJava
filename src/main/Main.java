@@ -21,6 +21,7 @@ public class Main implements DrawInferface, FrameInitInterface {
 	private DimensionF mapSize = new DimensionF(500, 500);
 
 	public Main() {
+
 		frame = new DrawFrame(frameSize, this, this, mapSize);
 	}
 
