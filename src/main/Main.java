@@ -46,7 +46,7 @@ public class Main implements DrawInferface, FrameInitInterface {
 				super.keyPressed(e);
 				char key = e.getKeyChar();
 				int i = 0;
-				while (key != keys[i] && i < keys.length) {
+				while (i < keys.length && key != keys[i]) {
 					i++;
 				}
 				if (i != keys.length) {

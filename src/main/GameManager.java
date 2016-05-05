@@ -1,9 +1,7 @@
 package main;
 
 import util.ClockNano;
-import util.Tickable;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -44,7 +42,7 @@ public class GameManager { // bla
 		float mapHeight = main.getMapSize().getHeight();
 
 		for (int i = 0; i < robotCount; i++) {
-			robots.add(Robot.spawnRandom(mapWidth, mapHeight));
+			robots.add(Robot.spawnRandom(mapWidth, mapHeight, this));
 		}
 	}
 

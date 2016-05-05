@@ -6,6 +6,10 @@ import util.DrawInferface;
  * Created by Florian on 05.05.2016
  */
 public abstract class Entity implements DrawInferface {
+	public interface Tickable{
+		void tick();
+	}
+
     protected float x, y, dir;
 
     protected GameManager gm;
@@ -18,7 +22,8 @@ public abstract class Entity implements DrawInferface {
         this.dir = dir;
     }
 
-    public void changeDir(float change) {
+
+	public void changeDir(float change) {
         dir += change;
         dir %= 2 * Math.PI;
     }
