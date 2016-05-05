@@ -7,6 +7,8 @@ import util.FrameInitInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by Florian on 05.05.2016. 16:48
@@ -20,6 +22,8 @@ public class Main implements DrawInferface, FrameInitInterface {
 	private Dimension frameSize = new Dimension(500, 500);
 	private DimensionF mapSize = new DimensionF(500, 500);
 	private GameManager gm;
+	private long[] keyDownTimestamp = new long[4];//w,a,s,d
+	private char[] keys = {'w', 'a', 's', 'd'};
 
 	public Main() {
 
@@ -35,7 +39,29 @@ public class Main implements DrawInferface, FrameInitInterface {
 
 	@Override
 	public void initFrame(JFrame f, DrawFrame.DrawPanel dp) {
+		f.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				super.keyPressed(e);
+				char key = e.getKeyChar();
+				int i = 0;
+				while (key != keys[i] && i < keys.length;) {
+					i++;
+				}
+				if(key != keys.length){
+					time
+				}
+			}
 
+			@Override
+			public void keyReleased(KeyEvent e) {
+				super.keyReleased(e);
+			}
+		});
+	}
+
+	public DrawFrame getFrame() {
+		return frame;
 	}
 
 	public DimensionF getMapSize() {

@@ -15,23 +15,23 @@ public class GameManager {
 	public static final int FPS = 60;
 	public static final int robotCount = 10;
 
+
+	//vars
 	private Main main;
 	private ClockNano drawClock, tickClock;
 	private ArrayList<Robot> robots = new ArrayList<>();
+	private Player player;
 
 	public GameManager(Main main) {
 		this.main = main;
 
-		//TODO spawn robots
+		//fills the ArrayList robots
 		spawnRobots(robotCount);
 
-		drawClock = new ClockNano(FPS, (Tickable) millisDelta -> {
-			for (Robot r : robots) {
-				r.draw();
-			}
-
+		drawClock = new ClockNano(FPS, millisDelta -> {
+			main.getFrame().redraw();
 		});
-		tickClock = new ClockNano(FPS, (Tickable) millisDelta -> {
+		tickClock = new ClockNano(FPS, millisDelta -> {
 			for (Robot r : robots) {
 				r.tick();
 			}
@@ -50,8 +50,8 @@ public class GameManager {
 
 
 	public void startTicking() {
-		drawClock.startTicking();
 		tickClock.startTicking();
+		drawClock.startTicking();
 		System.out.println("GameManager.startTicking");
 	}
 
