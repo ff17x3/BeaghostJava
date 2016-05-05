@@ -10,6 +10,7 @@ import java.awt.*;
 
 /**
  * Created by Florian on 05.05.2016. 16:48
+ * test edit 2.1
  */
 public class Main implements DrawInferface, FrameInitInterface {
 	public static void main(String[] args) {
