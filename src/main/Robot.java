@@ -3,7 +3,7 @@ package main;
 import java.awt.*;
 
 /**
- * Created by Ma on 05.05.2016
+ * Created by Max on 05.05.2016
  */
 public class Robot extends Entity {
     // statische Winkel für Boxen-----------------------------------------------
