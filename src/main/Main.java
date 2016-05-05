@@ -2,7 +2,6 @@ package main;
 
 import util.DimensionF;
 import util.DrawFrame;
-import util.DrawInferface;
 import util.FrameInitInterface;
 
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.awt.event.KeyEvent;
  * Created by Florian on 05.05.2016. 16:48
  * test edit 2.1
  */
-public class Main implements DrawInferface, FrameInitInterface {
+public class Main implements FrameInitInterface {
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -27,16 +26,13 @@ public class Main implements DrawInferface, FrameInitInterface {
 	private char[] keys = {'w', 'a', 's', 'd'};
 
 	public Main() {
-
-		frame = new DrawFrame(frameSize, this, this, mapSize);
-		gm = new GameManager(this);
+		gm = new GameManager(this,mapSize);
+		frame = new DrawFrame(frameSize, this, gm, mapSize);
 		gm.startTicking();
 	}
 
-	@Override
-	public void draw(Graphics g, float scale) {
 
-	}
+
 
 	@Override
 	public void initFrame(JFrame f, DrawFrame.DrawPanel dp) {
@@ -63,9 +59,5 @@ public class Main implements DrawInferface, FrameInitInterface {
 
 	public DrawFrame getFrame() {
 		return frame;
-	}
-
-	public DimensionF getMapSize() {
-		return mapSize;
 	}
 }
