@@ -45,11 +45,11 @@ public class Main implements DrawInferface, FrameInitInterface {
 				super.keyPressed(e);
 				char key = e.getKeyChar();
 				int i = 0;
-				while (key != keys[i] && i < keys.length;) {
+				while (key != keys[i] && i < keys.length) {
 					i++;
 				}
-				if(key != keys.length){
-					time
+				if (i != keys.length) {
+					keyDownTimestamp[i] = System.nanoTime();
 				}
 			}
 
