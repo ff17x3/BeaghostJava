@@ -33,4 +33,8 @@ public class Main implements DrawInferface, FrameInitInterface {
 	public void initFrame(JFrame f, DrawFrame.DrawPanel dp) {
 
 	}
+
+	public DimensionF getMapSize() {
+		return mapSize;
+	}
 }
