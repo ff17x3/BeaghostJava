@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Florian on 05.05.2016
  */
-public class GameManager {
+public class GameManager { // bla
 
 	// params:
 	public static final int FPS = 60;
