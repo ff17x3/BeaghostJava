@@ -42,6 +42,10 @@ public class GameManager {
 	private void spawnRobots(int robotCount) {
 		float mapWidth = main.getMapSize().getWidth();
 		float mapHeight = main.getMapSize().getHeight();
+
+		for (int i = 0; i < robotCount; i++) {
+			robots.add(Robot.spawnRandom(mapWidth, mapHeight));
+		}
 	}
 
 

@@ -19,10 +19,13 @@ public class Main implements DrawInferface, FrameInitInterface {
 	private DrawFrame frame;
 	private Dimension frameSize = new Dimension(500, 500);
 	private DimensionF mapSize = new DimensionF(500, 500);
+	private GameManager gm;
 
 	public Main() {
 
 		frame = new DrawFrame(frameSize, this, this, mapSize);
+		gm = new GameManager(this);
+		gm.startTicking();
 	}
 
 	@Override
