@@ -10,6 +10,11 @@ public class Player extends Entity implements Entity.Tickable {
     private static final float SPEED_PS = 100;
     private static final float RADIUS = 5;
 
+    //constants:
+    public static final int CM_KEYS = 0, CM_MOUSE = 1;
+
+    private int controlMode = CM_MOUSE;
+
     private long[] keyUpTimestamp, keyDownTimestamp;
     private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
     private float lastScale;
@@ -22,17 +27,17 @@ public class Player extends Entity implements Entity.Tickable {
     private static float a = (float) Math.atan(1 / 3d);
     private static final float[] ANGLES;
 
-	static {
-		ANGLES = new float[6];
-		ANGLES[0] = (float) Math.PI / 2 + a;
-		ANGLES[1] = 3 * (float) Math.PI / 2 - a;
-		ANGLES[2] = 3 * (float) Math.PI / 2 + a;
-		ANGLES[3] = (float) Math.PI / 2 - a;
+    static {
+        ANGLES = new float[6];
+        ANGLES[0] = (float) Math.PI / 2 + a;
+        ANGLES[1] = 3 * (float) Math.PI / 2 - a;
+        ANGLES[2] = 3 * (float) Math.PI / 2 + a;
+        ANGLES[3] = (float) Math.PI / 2 - a;
 
-		ANGLES[4] = (float) Math.PI / 2;
-		ANGLES[5] = 3 * (float) Math.PI / 2;
-	}
-	// ########################
+        ANGLES[4] = (float) Math.PI / 2;
+        ANGLES[5] = 3 * (float) Math.PI / 2;
+    }
+    // ########################
 
     public Player(float x, float y, float dir, GameManager gm) {
         super(x, y, dir, gm);
@@ -46,29 +51,29 @@ public class Player extends Entity implements Entity.Tickable {
         calcAngles();
     }
 
-	@Override
-	public synchronized void draw(Graphics g, float scale) {
-		lastScale = scale;
-		// TODO Colors
-		g.setColor(Color.DARK_GRAY);
-		// shoulders 1
-		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
-		g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2, scale), tfm(angleSins[5] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
-		// shoulders 2
-		poly.reset();
-		poly.addPoint(tfm(angleCosins[0] * distA + x, scale), tfm(angleSins[0] * distA + y, scale));
-		poly.addPoint(tfm(angleCosins[1] * distA + x, scale), tfm(angleSins[1] * distA + y, scale));
-		poly.addPoint(tfm(angleCosins[2] * distA + x, scale), tfm(angleSins[2] * distA + y, scale));
-		poly.addPoint(tfm(angleCosins[3] * distA + x, scale), tfm(angleSins[3] * distA + y, scale));
-		g.fillPolygon(poly);
-		// center circle
-		g.setColor(Color.GRAY);
-		g.fillOval(tfm(x - radius, scale), tfm(y - radius, scale), tfm(2 * radius, scale), tfm(2 * radius, scale));
+    @Override
+    public synchronized void draw(Graphics g, float scale) {
+        lastScale = scale;
+        // TODO Colors
+        g.setColor(Color.DARK_GRAY);
+        // shoulders 1
+        g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
+        g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2, scale), tfm(angleSins[5] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
+        // shoulders 2
+        poly.reset();
+        poly.addPoint(tfm(angleCosins[0] * distA + x, scale), tfm(angleSins[0] * distA + y, scale));
+        poly.addPoint(tfm(angleCosins[1] * distA + x, scale), tfm(angleSins[1] * distA + y, scale));
+        poly.addPoint(tfm(angleCosins[2] * distA + x, scale), tfm(angleSins[2] * distA + y, scale));
+        poly.addPoint(tfm(angleCosins[3] * distA + x, scale), tfm(angleSins[3] * distA + y, scale));
+        g.fillPolygon(poly);
+        // center circle
+        g.setColor(Color.GRAY);
+        g.fillOval(tfm(x - radius, scale), tfm(y - radius, scale), tfm(2 * radius, scale), tfm(2 * radius, scale));
 
-		// TODO remove
-		g.setColor(Color.RED);
-		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
-	}
+        // TODO remove
+        g.setColor(Color.RED);
+        drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
+    }
 
     private static int tfm(double v, float scale) {
         return (int) Math.round(scale * v);
@@ -81,7 +86,10 @@ public class Player extends Entity implements Entity.Tickable {
         keyDownTimestamp = gm.getKeyDownTimestamp();
 
         tickTimestamp = System.nanoTime();
-        updateDir();
+
+        if (controlMode == CM_MOUSE)
+            updateDir();
+
 
         for (int key = 0; key < keyUpTimestamp.length; key++) {
 
@@ -94,6 +102,10 @@ public class Player extends Entity implements Entity.Tickable {
             } else
                 continue;
             moveDir(key, downtime);
+            if(controlMode == CM_KEYS){
+
+            }
+
         }
 
         lastTickTimestamp = tickTimestamp;
@@ -150,18 +162,22 @@ public class Player extends Entity implements Entity.Tickable {
         calcAngles();
     }
 
-	private void calcAngles() {
-		// Werte für Boxen an den Seiten an Winkel anpassen
-		for (int i = 0; i < ANGLES.length; i++) {
-			float actangle = dir + ANGLES[i];
-			actangle %= 2 * Math.PI;
-			angleSins[i] = (float) Math.sin(actangle);
-			angleCosins[i] = (float) Math.cos(actangle);
-		}
-	}
+    private void calcAngles() {
+        // Werte für Boxen an den Seiten an Winkel anpassen
+        for (int i = 0; i < ANGLES.length; i++) {
+            float actangle = dir + ANGLES[i];
+            actangle %= 2 * Math.PI;
+            angleSins[i] = (float) Math.sin(actangle);
+            angleCosins[i] = (float) Math.cos(actangle);
+        }
+    }
 
-	public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
-		g.drawLine(middle.x - halfBoxSize, middle.y - halfBoxSize, middle.x + halfBoxSize, middle.y + halfBoxSize);
-		g.drawLine(middle.x - halfBoxSize, middle.y + halfBoxSize, middle.x + halfBoxSize, middle.y - halfBoxSize);
-	}
+    public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
+        g.drawLine(middle.x - halfBoxSize, middle.y - halfBoxSize, middle.x + halfBoxSize, middle.y + halfBoxSize);
+        g.drawLine(middle.x - halfBoxSize, middle.y + halfBoxSize, middle.x + halfBoxSize, middle.y - halfBoxSize);
+    }
+
+    public int getControlMode() {
+        return controlMode;
+    }
 }
