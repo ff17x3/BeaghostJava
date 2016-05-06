@@ -47,7 +47,7 @@ public class Robot extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	public void draw(Graphics g, float scale) {
+	public synchronized void draw(Graphics g, float scale) {
 		// Blöcke links und rechts
 		// rechter Block
 		poly.reset();
@@ -91,7 +91,7 @@ public class Robot extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	public void tick() {
+	public synchronized void tick() {
 
 	}
 }

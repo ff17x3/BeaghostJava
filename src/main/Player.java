@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public class Player extends Entity implements Entity.Tickable {
 
-	private static final float SPEED_PS = 20;
+	private static final float SPEED_PS = 100;
 	private static final float RADIUS = 5;
 
 	private long[] keyUpTimestamp, keyDownTimestamp;
@@ -46,7 +46,7 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	public void draw(Graphics g, float scale) {
+	public synchronized void draw(Graphics g, float scale) {
 		g.fillOval(tfm(x - RADIUS, scale), tfm(y - RADIUS, scale), tfm(2 * RADIUS, scale), tfm(2 * RADIUS, scale));
 
 		// TODO Colors
@@ -70,7 +70,7 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	public void tick() {
+	public synchronized void tick() {
 		//move Player when keys pressed
 		keyUpTimestamp = gm.getKeyUpTimestamp();
 		keyDownTimestamp = gm.getKeyDownTimestamp();
@@ -79,13 +79,14 @@ public class Player extends Entity implements Entity.Tickable {
 
 		for (int key = 0; key < keyUpTimestamp.length; key++) {
 
-			if (keyUpTimestamp[key] < keyUpTimestamp[key]) {
+			if (keyUpTimestamp[key] < keyDownTimestamp[key]) {
 				//key still pressed
 				downtime = tickTimestamp - lastTickTimestamp;
 			} else if (keyUpTimestamp[key] > lastTickTimestamp) {
 				//key was released in last tick
 				downtime = keyUpTimestamp[key] - lastTickTimestamp;
-			}
+			} else
+				continue;
 			moveDir(key, downtime);
 		}
 
