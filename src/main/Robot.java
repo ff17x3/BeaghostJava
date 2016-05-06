@@ -124,7 +124,6 @@ public class Robot extends Entity implements ScaleChangeListener {
 
 	public void die() {
 		isDead = true;
-		System.out.println("dead");
 	}
 
 	@Override
