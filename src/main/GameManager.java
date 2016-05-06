@@ -19,41 +19,75 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 	public static final int robotCount = 10;
 
 
-	//vars
-	private Main main;
-	private ClockNano drawClock, tickClock;
-	private ArrayList<Robot> robots = new ArrayList<>();
-	private Player player;
-	private DimensionF mapSize;
+    //vars
+    private Main main;
+    private ClockNano drawClock, tickClock;
+    private ArrayList<Robot> robots = new ArrayList<>();
+    private Player player;
+    private DimensionF mapSize;
+    private int counter = 0;
+    private long timeOld = System.nanoTime(), time;
+    private int inteval = 60;
+    private long[] times = new long[inteval];
 
 	public GameManager(Main main, DimensionF mapSize) {
 		this.main = main;
 		this.mapSize = mapSize;
 
-		//fills the ArrayList robots
-		spawnRobots(robotCount);
-		player = new Player(200, 200, 0, this);
-		System.out.println("spawend " + robotCount + " Robots");
-		drawClock = new ClockNano(FPS, millisDelta -> main.getFrame().redraw());
-		tickClock = new ClockNano(FPS, millisDelta -> {
-			for (Robot r : robots) {
-				if (r instanceof Entity.Tickable)
-					((Entity.Tickable) r).tick();
-			}
-			player.tick();
-		});
+        //fills the ArrayList robots
+        spawnRobots(robotCount);
+        player = new Player(200, 200, 0, this);
+        System.out.println("spawend " + robotCount + " Robots");
+        drawClock = new ClockNano(FPS, millisDelta -> {
+            main.getFrame().redraw();
+            times[counter] = System.nanoTime();
+            if (counter == inteval) {
+                time = System.nanoTime();
+                System.out.println("FPS(draw): " + (1f*inteval / (time - timeOld) * 1e9));
+                timeOld = time;
+                counter = 0;
+            } else {
+                counter++;
+            }
+        });
+        tickClock = new ClockNano(FPS, millisDelta -> {
+            for (Robot r : robots) {
+                if (r instanceof Entity.Tickable)
+                    ((Entity.Tickable) r).tick();
+            }
+            player.tick();
+        });
 
 	}
 
-	private void spawnRobots(int robotCount) {
-		float mapWidth = mapSize.getWidth();
-		float mapHeight = mapSize.getHeight();
+    private void spawnRobots(int robotCount) {
+        float mapWidth = mapSize.getWidth();
+        float mapHeight = mapSize.getHeight();
+        float RADIUS = Robot.RADIUS;
 
-		for (int i = 0; i < robotCount; i++) {
-			robots.add(Robot.spawnRandom(mapWidth, mapHeight, this));
-		}
-		robots.add(new KIRobot1(200, 200, 0, this));
-	}
+        float x, y, dir;
+        for (int i = 0; i < robotCount; i++) {
+            do {
+                x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
+                y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
+            } while (!isFree(x, y, RADIUS));
+            dir = (float) (Math.random() * (2 * Math.PI));
+            robots.add(new Robot(x, y, dir, this));
+        }
+        robots.add(new KIRobot1(200, 200, 0, this));
+    }
+
+    private boolean isFree(float x, float y, float radius) {
+        for (Robot r : robots) {
+            if (Math.sqrt(Math.pow((r.x - x), 2) + Math.pow((r.y - y), 2)) <= 2 * radius)
+                return false;
+        }
+        return true;
+    }
+
+    private void spawnRobots() {
+
+    }
 
 	@Override
 	public void draw(Graphics g1, float s) {

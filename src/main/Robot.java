@@ -17,7 +17,7 @@ public class Robot extends Entity implements ScaleChangeListener {
 	private static final float[] ANGLES; // Winkel für Ecken von Boxen
 	private static final float RADIUS = 10;
 	private static BufferedImage deadTexture;
-
+	private static final float SIZE = 7 / 4 * RADIUS;
 	static {
 		// ANGLES init
 		ANGLES = new float[8];
@@ -50,12 +50,12 @@ public class Robot extends Entity implements ScaleChangeListener {
 	private Image deadTextureS;
 	// ++++++++++++++++++
 
-	public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
-		float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
-		float y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
-		float dir = (float) (Math.random() * (2 * Math.PI));
-		return new Robot(x, y, dir, gm);
-	}
+    public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
+        float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
+        float y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
+        float dir = (float) (Math.random() * (2 * Math.PI));
+        return new Robot(x, y, dir, gm);
+    }
 
 	public Robot(float x, float y, float dir, GameManager gm) {
 		// TODO body color
@@ -100,27 +100,27 @@ public class Robot extends Entity implements ScaleChangeListener {
 	}
 
 
-	@Override
-	public void setDir(float dir) {
-		super.setDir(dir);
-		calcAngles();
-	}
+    @Override
+    public void setDir(float dir) {
+        super.setDir(dir);
+        calcAngles();
+    }
 
-	@Override
-	public void changeDir(float change) {
-		super.changeDir(change);
-		calcAngles();
-	}
+    @Override
+    public void changeDir(float change) {
+        super.changeDir(change);
+        calcAngles();
+    }
 
-	private void calcAngles() {
-		// Werte für Boxen an den Seiten an Winkel anpassen
-		for (int i = 0; i < ANGLES.length; i++) {
-			float actangle = dir + ANGLES[i];
-			actangle %= 2 * Math.PI;
-			angleSins[i] = (float) Math.sin(actangle);
-			angleCosins[i] = (float) Math.cos(actangle);
-		}
-	}
+    private void calcAngles() {
+        // Werte für Boxen an den Seiten an Winkel anpassen
+        for (int i = 0; i < ANGLES.length; i++) {
+            float actangle = dir + ANGLES[i];
+            actangle %= 2 * Math.PI;
+            angleSins[i] = (float) Math.sin(actangle);
+            angleCosins[i] = (float) Math.cos(actangle);
+        }
+    }
 
 	public void die() {
 		isDead = true;
