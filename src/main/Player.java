@@ -37,8 +37,8 @@ public class Player extends Entity implements Entity.Tickable {
 		super(x, y, dir, gm);
 		radius = RADIUS;
 		r2 = radius / 2;
-		angleSins = new float[4];
-		angleCosins = new float[4];
+		angleSins = new float[6];
+		angleCosins = new float[6];
 		poly = new Polygon();
 		distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
 		distB = radius * 1.5f;
@@ -52,7 +52,8 @@ public class Player extends Entity implements Entity.Tickable {
 		// TODO Colors
 		g.setColor(Color.DARK_GRAY);
 		// shoulders 1
-		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), Math.round(radius), Math.round(radius));
+		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
+		g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2, scale), tfm(angleSins[5] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
 		// shoulders 2
 		poly.reset();
 		poly.addPoint(tfm(angleCosins[0] * distA + x, scale), tfm(angleSins[0] * distA + y, scale));
