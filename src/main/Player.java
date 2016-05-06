@@ -8,6 +8,7 @@ import java.awt.*;
 public class Player extends Entity implements Entity.Tickable {
 
 	private static final float SPEED_PS = 20;
+	private static final float RADIUS = 5;
 
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
@@ -22,8 +23,12 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	public void draw(Graphics g, float scale) {
+	public void draw(Graphics g, float s) {
+		g.drawOval(tfm(x - RADIUS, s), tfm(y - RADIUS, s), tfm(2 * RADIUS, s), tfm(2 * RADIUS, s));
+	}
 
+	private static int tfm(double x, float scale) {
+		return (int) Math.round(scale * x);
 	}
 
 	@Override
@@ -45,7 +50,6 @@ public class Player extends Entity implements Entity.Tickable {
 			}
 			moveDir(key, downtime);
 		}
-
 
 		lastTickTimestamp = tickTimestamp;
 	}
@@ -73,6 +77,7 @@ public class Player extends Entity implements Entity.Tickable {
 		float dy = (float) (Math.sin(angle) * dis);
 		float dx = (float) (Math.cos(angle) * dis);
 
-
+		x += dx;
+		y += dy;
 	}
 }
