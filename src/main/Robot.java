@@ -5,10 +5,10 @@ import java.awt.*;
 /**
  * Created by Max on 05.05.2016
  */
-public class Robot extends Entity implements Entity.Tickable{
+public class Robot extends Entity implements Entity.Tickable {
 	// statische Winkel für Boxen-----------------------------------------------
 	private static final float[] ANGLES; // Winkel für Ecken von Boxen
-	private static final float RADIUS = 5;
+	private static final float RADIUS = 10;
 
 	static {
 		// ANGLES init
@@ -28,8 +28,7 @@ public class Robot extends Entity implements Entity.Tickable{
 	// Zeichnen:++++++++
 	private float[] angleSins = new float[8], angleCosins = new float[8];
 	private Polygon poly = new Polygon();
-	private float radius;
-	private final float distA = (float) (Math.sqrt(2) * radius), distB = (float) (Math.sqrt(4.0625) * radius); // TODO anpassen, wenn sich radius ändert
+	private final float distA = (float) (Math.sqrt(2) * RADIUS), distB = (float) (Math.sqrt(4.0625) * RADIUS); // TODO anpassen, wenn sich RADIUS ändert
 	// ++++++++++++++
 
 	public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
@@ -44,6 +43,7 @@ public class Robot extends Entity implements Entity.Tickable{
 		super(x, y, dir, gm);
 		angleSins = new float[8];
 		angleCosins = new float[8];
+		calcAngles();
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class Robot extends Entity implements Entity.Tickable{
 		g.fillPolygon(poly);
 		// sichtfeld TODO
 		// Körper
-		g.fillOval(Math.round(x - radius), Math.round(y - radius), Math.round(radius * 2), Math.round(radius * 2));
+		g.fillOval(Math.round((x - RADIUS) * scale), Math.round((y - RADIUS) * scale), Math.round(RADIUS * 2 * scale), Math.round(RADIUS * 2 * scale));
 	}
 
 	@Override

@@ -23,15 +23,14 @@ public class Main implements FrameInitInterface {
 	private DimensionF mapSize = new DimensionF(500, 500);
 	private GameManager gm;
 	private long[] keyDownTimestamp = new long[4];//w,a,s,d
+	private long[] keyUpTimestamp = new long[4];//w,a,s,d
 	private char[] keys = {'w', 'a', 's', 'd'};
 
 	public Main() {
-		gm = new GameManager(this,mapSize);
+		gm = new GameManager(this, mapSize);
 		frame = new DrawFrame(frameSize, this, gm, mapSize);
 		gm.startTicking();
 	}
-
-
 
 
 	@Override
@@ -40,24 +39,37 @@ public class Main implements FrameInitInterface {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
-				char key = e.getKeyChar();
-				int i = 0;
-				while (i < keys.length && key != keys[i]) {
-					i++;
-				}
-				if (i != keys.length) {
-					keyDownTimestamp[i] = System.nanoTime();
-				}
+				writeTimestamp(e, keyDownTimestamp);
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				super.keyReleased(e);
+				writeTimestamp(e, keyUpTimestamp);
 			}
 		});
 	}
 
+	private void writeTimestamp(KeyEvent e, long[] keyTimestamp) {
+		char key = e.getKeyChar();
+		int i = 0;
+		while (i < keys.length && key != keys[i]) {
+			i++;
+		}
+		if (i != keys.length) {
+			keyTimestamp[i] = System.nanoTime();
+		}
+	}
+
 	public DrawFrame getFrame() {
 		return frame;
+	}
+
+	public long[] getKeyDownTimestamp() {
+		return keyDownTimestamp;
+	}
+
+	public long[] getKeyUpTimestamp() {
+		return keyUpTimestamp;
 	}
 }
