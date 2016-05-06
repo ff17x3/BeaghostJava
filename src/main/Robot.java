@@ -25,11 +25,11 @@ public class Robot extends Entity implements Entity.Tickable {
 	}
 
 	// -----------------------------------------------------------------------
-	// Zeichnen:++++++++
+	// Zeichnen: ++++++++
 	private float[] angleSins = new float[8], angleCosins = new float[8];
 	private Polygon poly = new Polygon();
 	private final float distA = (float) (Math.sqrt(2) * RADIUS), distB = (float) (Math.sqrt(4.0625) * RADIUS); // TODO anpassen, wenn sich RADIUS ändert
-	// ++++++++++++++
+	// ++++++++++++++++++
 
 	public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
 		float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);

@@ -7,22 +7,26 @@ import java.awt.*;
  */
 public class Player extends Entity implements Entity.Tickable {
 
-    private static final float SPEED_PS = 100;
-    private static final float RADIUS = 5;
+	// movement
+	private float speed_ps = 100;
 
-    private long[] keyUpTimestamp, keyDownTimestamp;
-    private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
-    private float lastScale;
+	// others
+	private float view_arc = (float) Math.PI / 2;
 
-    // drawing#####################
-    private float radius, r2, distA, distB;
-    private float[] angleSins, angleCosins;
-    private Polygon poly;
+	// keys
+	private long[] keyUpTimestamp, keyDownTimestamp;
+	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
 
-    private static float a = (float) Math.atan(1 / 3d);
-    private static final float[] ANGLES;
+	// drawing#####################
+	private float lastScale;
+	private final float radius, distA, distB;
+	private float[] angleSins, angleCosins;
+	private Polygon poly;
+
+	private static final float[] ANGLES;
 
 	static {
+		float a = (float) Math.atan(1 / 3d);
 		ANGLES = new float[6];
 		ANGLES[0] = (float) Math.PI / 2 + a;
 		ANGLES[1] = 3 * (float) Math.PI / 2 - a;
@@ -34,27 +38,26 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 	// ########################
 
-    public Player(float x, float y, float dir, GameManager gm) {
-        super(x, y, dir, gm);
-        radius = RADIUS;
-        r2 = radius / 2;
-        angleSins = new float[6];
-        angleCosins = new float[6];
-        poly = new Polygon();
-        distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
-        distB = radius * 1.5f;
-        calcAngles();
-    }
+	public Player(float x, float y, float dir, GameManager gm) {
+		super(x, y, dir, gm);
+		radius = 20; // hardcode
+		angleSins = new float[6];
+		angleCosins = new float[6];
+		poly = new Polygon();
+		distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
+		distB = radius * 1.5f;
+		calcAngles();
+	}
 
 	@Override
 	public synchronized void draw(Graphics g, float scale) {
 		lastScale = scale;
 		// TODO Colors
+		// view sector
+		//shoulders
 		g.setColor(Color.DARK_GRAY);
-		// shoulders 1
 		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
 		g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2, scale), tfm(angleSins[5] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
-		// shoulders 2
 		poly.reset();
 		poly.addPoint(tfm(angleCosins[0] * distA + x, scale), tfm(angleSins[0] * distA + y, scale));
 		poly.addPoint(tfm(angleCosins[1] * distA + x, scale), tfm(angleSins[1] * distA + y, scale));
@@ -65,90 +68,89 @@ public class Player extends Entity implements Entity.Tickable {
 		g.setColor(Color.GRAY);
 		g.fillOval(tfm(x - radius, scale), tfm(y - radius, scale), tfm(2 * radius, scale), tfm(2 * radius, scale));
 
-		// TODO remove
-		g.setColor(Color.RED);
-		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
+//		g.setColor(Color.RED);
+//		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
 	}
 
-    private static int tfm(double v, float scale) {
-        return (int) Math.round(scale * v);
-    }
+	private static int tfm(double v, float scale) {
+		return (int) Math.round(scale * v);
+	}
 
-    @Override
-    public synchronized void tick() {
-        //move Player when keys pressed
-        keyUpTimestamp = gm.getKeyUpTimestamp();
-        keyDownTimestamp = gm.getKeyDownTimestamp();
+	@Override
+	public synchronized void tick() {
+		// move Player when keys pressed
+		keyUpTimestamp = gm.getKeyUpTimestamp();
+		keyDownTimestamp = gm.getKeyDownTimestamp();
 
-        tickTimestamp = System.nanoTime();
-        updateDir();
+		tickTimestamp = System.nanoTime();
+		updateDir();
 
-        for (int key = 0; key < keyUpTimestamp.length; key++) {
+		for (int key = 0; key < keyUpTimestamp.length; key++) {
 
-            if (keyUpTimestamp[key] < keyDownTimestamp[key]) {
-                //key still pressed
-                downtime = tickTimestamp - lastTickTimestamp;
-            } else if (keyUpTimestamp[key] > lastTickTimestamp) {
-                //key was released in last tick
-                downtime = keyUpTimestamp[key] - lastTickTimestamp;
-            } else
-                continue;
-            moveDir(key, downtime);
-        }
+			if (keyUpTimestamp[key] < keyDownTimestamp[key]) {
+				// key still pressed
+				downtime = tickTimestamp - lastTickTimestamp;
+			} else if (keyUpTimestamp[key] > lastTickTimestamp) {
+				//key was released in last tick
+				downtime = keyUpTimestamp[key] - lastTickTimestamp;
+			} else
+				continue;
+			moveDir(key, downtime);
+		}
 
-        lastTickTimestamp = tickTimestamp;
-    }
+		lastTickTimestamp = tickTimestamp;
+	}
 
-    private void updateDir() {
-        float mouseX = gm.getMouseOnscreenX() / lastScale;
-        float mouseY = gm.getMouseOnscreenY() / lastScale;
-        setDir((float) Math.atan2((mouseY - y), (mouseX - x)));
-    }
+	private void updateDir() {
+		float mouseX = gm.getMouseOnscreenX() / lastScale;
+		float mouseY = gm.getMouseOnscreenY() / lastScale;
+		setDir((float) Math.atan2((mouseY - y), (mouseX - x)));
+	}
 
-    /**
-     * @param dirKey 0:w, 1:a, 2:s, 3:d
-     * @param time
-     */
-    private void moveDir(int dirKey, long time) {
-        float dis = (float) (SPEED_PS * time / 1e9);
-        float angle;
-        switch (dirKey) {
-            case 1://a,left
-                angle = (float) (dir - Math.PI / 2);
-                break;
-            case 2://s,back
-                angle = (float) (dir + Math.PI);
-                break;
-            case 3://d,right
-                angle = (float) (dir + Math.PI / 2);
-                break;
-            default:
-                angle = dir;
-        }
-        float dy = (float) (Math.sin(angle) * dis);
-        float dx = (float) (Math.cos(angle) * dis);
+	/**
+	 * @param dirKey 0:w, 1:a, 2:s, 3:d
+	 * @param time
+	 */
+	private void moveDir(int dirKey, long time) {
+		float dis = (float) (speed_ps * time / 1e9);
+		float angle;
+		switch (dirKey) {
+			case 1://a,left
+				angle = (float) (dir - Math.PI / 2);
+				break;
+			case 2://s,back
+				angle = (float) (dir + Math.PI);
+				break;
+			case 3://d,right
+				angle = (float) (dir + Math.PI / 2);
+				break;
+			default:
+				angle = dir;
+		}
+		float dy = (float) (Math.sin(angle) * dis);
+		float dx = (float) (Math.cos(angle) * dis);
 
-        x = add(x, dx, gm.getMapWidth(), 2 * radius);
-        y = add(y, dy, gm.getMapHeight(), 2 * radius);
-        if (x + 2 * radius > gm.getMapWidth())
-            x = gm.getMapWidth() - 2 * radius;
+		x = add(x, dx, gm.getMapWidth(), 2 * radius);
+		y = add(y, dy, gm.getMapHeight(), 2 * radius);
+		if (x + 2 * radius > gm.getMapWidth())
+			x = gm.getMapWidth() - 2 * radius;
 
-    }
+	}
 
-    private float add(float a, float change, float max, float padding) {
-        a += change;
-        if (a + padding > max)
-            a = max - padding;
-        else if (a - padding < 0)
-            a = padding;
-        return a;
-    }
+	private float add(float a, float change, float max, float padding) {
+		a += change;
+		if (a + padding > max)
+			a = max - padding;
+		else if (a - padding < 0)
+			a = padding;
+		return a;
+	}
 
-    @Override
-    public void setDir(float dir) {
-        super.setDir(dir);
-        calcAngles();
-    }
+	@Override
+	public void setDir(float dir) {
+		super.setDir(dir);
+		calcAngles();
+	}
 
 	private void calcAngles() {
 		// Werte für Boxen an den Seiten an Winkel anpassen
@@ -160,8 +162,8 @@ public class Player extends Entity implements Entity.Tickable {
 		}
 	}
 
-	public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
-		g.drawLine(middle.x - halfBoxSize, middle.y - halfBoxSize, middle.x + halfBoxSize, middle.y + halfBoxSize);
-		g.drawLine(middle.x - halfBoxSize, middle.y + halfBoxSize, middle.x + halfBoxSize, middle.y - halfBoxSize);
-	}
+//	public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
+//		g.drawLine(middle.x - halfBoxSize, middle.y - halfBoxSize, middle.x + halfBoxSize, middle.y + halfBoxSize);
+//		g.drawLine(middle.x - halfBoxSize, middle.y + halfBoxSize, middle.x + halfBoxSize, middle.y - halfBoxSize);
+//	}
 }
