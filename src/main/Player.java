@@ -7,6 +7,8 @@ import java.awt.*;
  */
 public class Player extends Entity implements Entity.Tickable {
 
+	private static final float SPEED_PS = 20;
+
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
 
@@ -33,19 +35,44 @@ public class Player extends Entity implements Entity.Tickable {
 		tickTimestamp = System.nanoTime();
 
 		for (int key = 0; key < keyUpTimestamp.length; key++) {
-			if (keyDownTimestamp[key] > lastTickTimestamp) {
-				if ((downtime = keyUpTimestamp[key] - keyDownTimestamp[key]) < 0)
-					downtime = keyDownTimestamp[key] - lastTickTimestamp;
-				//key war für downtime micros gedrückt
 
-
-			} else if (keyUpTimestamp[key] < keyUpTimestamp[key]) {
+			if (keyUpTimestamp[key] < keyUpTimestamp[key]) {
 				//key still pressed
-
+				downtime = tickTimestamp - lastTickTimestamp;
+			} else if (keyUpTimestamp[key] > lastTickTimestamp) {
+				//key was released in last tick
+				downtime = keyUpTimestamp[key] - lastTickTimestamp;
 			}
+			moveDir(key, downtime);
 		}
 
 
 		lastTickTimestamp = tickTimestamp;
+	}
+
+	/**
+	 * @param dirKey 0:w, 1:a, 2:s, 3:d
+	 * @param time
+	 */
+	private void moveDir(int dirKey, long time) {
+		float dis = (float) (SPEED_PS * time / 1e9);
+		float angle;
+		switch (dirKey) {
+			case 1://a,left
+				angle = (float) (dir - Math.PI / 2);
+				break;
+			case 2://s,back
+				angle = (float) (dir + Math.PI);
+				break;
+			case 3://d,right
+				angle = (float) (dir + Math.PI / 2);
+				break;
+			default:
+				angle = dir;
+		}
+		float dy = (float) (Math.sin(angle) * dis);
+		float dx = (float) (Math.cos(angle) * dis);
+
+
 	}
 }
