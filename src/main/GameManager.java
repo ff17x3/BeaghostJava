@@ -13,12 +13,9 @@ import java.util.ArrayList;
 public class GameManager implements DrawInferface { // bla
 
 
-
     // params:
     public static final int FPS = 60;
     public static final int robotCount = 10;
-
-
 
 
     //vars
@@ -49,10 +46,20 @@ public class GameManager implements DrawInferface { // bla
     private void spawnRobots(int robotCount) {
         float mapWidth = mapSize.getWidth();
         float mapHeight = mapSize.getHeight();
+        float RADIUS = Robot.RADIUS;
 
         for (int i = 0; i < robotCount; i++) {
-            robots.add(Robot.spawnRandom(mapWidth, mapHeight, this));
+
+            float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
+            float y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
+            float dir = (float) (Math.random() * (2 * Math.PI));
+
+            robots.add(new Robot(x, y, dir, this));
         }
+    }
+
+    private void spawnRobots() {
+
     }
 
     @Override
