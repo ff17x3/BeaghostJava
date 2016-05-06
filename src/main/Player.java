@@ -7,28 +7,33 @@ import java.awt.*;
  */
 public class Player extends Entity implements Entity.Tickable {
 
-	// movement
-	private float speed_ps = 100;
+    //const
+    public static final int CM_KEYS = 0, CM_MOUSE = 1;
+
+    // movement
+    private float speed_ps = 100;
 
 	// keys
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
+	private int controlMode = CM_MOUSE;
 
-	// drawing#####################
-	private float lastScale;
-	private final float radius, distA, distB;
-	private float[] angleSins, angleCosins;
-	private Polygon poly;
+    // drawing#####################
+    private float angleTick;// in welche Richtung bewegt sich der Player in diesem Tick
+    private float lastScale;
+    private final float radius, distA, distB;
+    private float[] angleSins, angleCosins;
+    private Polygon poly;
 
-	private static final float[] ANGLES;
+    private static final float[] ANGLES;
 
-	static {
-		float a = (float) Math.atan(1 / 3d);
-		ANGLES = new float[6];
-		ANGLES[0] = (float) Math.PI / 2 + a;
-		ANGLES[1] = 3 * (float) Math.PI / 2 - a;
-		ANGLES[2] = 3 * (float) Math.PI / 2 + a;
-		ANGLES[3] = (float) Math.PI / 2 - a;
+    static {
+        float a = (float) Math.atan(1 / 3d);
+        ANGLES = new float[6];
+        ANGLES[0] = (float) Math.PI / 2 + a;
+        ANGLES[1] = 3 * (float) Math.PI / 2 - a;
+        ANGLES[2] = 3 * (float) Math.PI / 2 + a;
+        ANGLES[3] = (float) Math.PI / 2 - a;
 
 		ANGLES[4] = (float) Math.PI / 2;
 		ANGLES[5] = 3 * (float) Math.PI / 2;
@@ -66,87 +71,89 @@ public class Player extends Entity implements Entity.Tickable {
 
 //		g.setColor(Color.RED);
 //		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
-	}
+    }
 
-	private static int tfm(double v, float scale) {
-		return (int) Math.round(scale * v);
-	}
+    private static int tfm(double v, float scale) {
+        return (int) Math.round(scale * v);
+    }
 
-	@Override
-	public synchronized void tick() {
-		// move Player when keys pressed
-		keyUpTimestamp = gm.getKeyUpTimestamp();
-		keyDownTimestamp = gm.getKeyDownTimestamp();
+    @Override
+    public synchronized void tick() {
+        // move Player when keys pressed
+        keyUpTimestamp = gm.getKeyUpTimestamp();
+        keyDownTimestamp = gm.getKeyDownTimestamp();
 
-		tickTimestamp = System.nanoTime();
-		updateDir();
+        tickTimestamp = System.nanoTime();
 
-		for (int key = 0; key < keyUpTimestamp.length; key++) {
+        if (controlMode == CM_MOUSE)
+            updateDir();
 
-			if (keyUpTimestamp[key] < keyDownTimestamp[key]) {
-				// key still pressed
-				downtime = tickTimestamp - lastTickTimestamp;
-			} else if (keyUpTimestamp[key] > lastTickTimestamp) {
-				//key was released in last tick
-				downtime = keyUpTimestamp[key] - lastTickTimestamp;
-			} else
-				continue;
-			moveDir(key, downtime);
-		}
+        for (int key = 0; key < keyUpTimestamp.length; key++) {
 
-		lastTickTimestamp = tickTimestamp;
-	}
+            if (keyUpTimestamp[key] < keyDownTimestamp[key]) {
+                // key still pressed
+                downtime = tickTimestamp - lastTickTimestamp;
+            } else if (keyUpTimestamp[key] > lastTickTimestamp) {
+                //key was released in last tick
+                downtime = keyUpTimestamp[key] - lastTickTimestamp;
+            } else
+                continue;
+            moveDir(key, downtime);
+        }
 
-	private void updateDir() {
-		float mouseX = gm.getMouseOnscreenX() / lastScale;
-		float mouseY = gm.getMouseOnscreenY() / lastScale;
-		setDir((float) Math.atan2((mouseY - y), (mouseX - x)));
-	}
+        lastTickTimestamp = tickTimestamp;
+    }
 
-	/**
-	 * @param dirKey 0:w, 1:a, 2:s, 3:d
-	 * @param time
-	 */
-	private void moveDir(int dirKey, long time) {
-		float dis = (float) (speed_ps * time / 1e9);
-		float angle;
-		switch (dirKey) {
-			case 1://a,left
-				angle = (float) (dir - Math.PI / 2);
-				break;
-			case 2://s,back
-				angle = (float) (dir + Math.PI);
-				break;
-			case 3://d,right
-				angle = (float) (dir + Math.PI / 2);
-				break;
-			default:
-				angle = dir;
-		}
-		float dy = (float) (Math.sin(angle) * dis);
-		float dx = (float) (Math.cos(angle) * dis);
+    private void updateDir() {
+        float mouseX = gm.getMouseOnscreenX() / lastScale;
+        float mouseY = gm.getMouseOnscreenY() / lastScale;
+        setDir((float) Math.atan2((mouseY - y), (mouseX - x)));
+    }
 
-		x = add(x, dx, gm.getMapWidth(), 2 * radius);
-		y = add(y, dy, gm.getMapHeight(), 2 * radius);
-		if (x + 2 * radius > gm.getMapWidth())
-			x = gm.getMapWidth() - 2 * radius;
+    /**
+     * @param dirKey 0:w, 1:a, 2:s, 3:d
+     * @param time
+     */
+    private void moveDir(int dirKey, long time) {
+        float dis = (float) (speed_ps * time / 1e9);
+        float angle;
+        switch (dirKey) {
+            case 1://a,left
+                angle = (float) (dir - Math.PI / 2);
+                break;
+            case 2://s,back
+                angle = (float) (dir + Math.PI);
+                break;
+            case 3://d,right
+                angle = (float) (dir + Math.PI / 2);
+                break;
+            default:
+                angle = dir;
+        }
+        float dy = (float) (Math.sin(angle) * dis);
+        float dx = (float) (Math.cos(angle) * dis);
 
-	}
+        x = add(x, dx, gm.getMapWidth(), 2 * radius);
+        y = add(y, dy, gm.getMapHeight(), 2 * radius);
+        if (x + 2 * radius > gm.getMapWidth())
+            x = gm.getMapWidth() - 2 * radius;
 
-	private float add(float a, float change, float max, float padding) {
-		a += change;
-		if (a + padding > max)
-			a = max - padding;
-		else if (a - padding < 0)
-			a = padding;
-		return a;
-	}
+    }
 
-	@Override
-	public void setDir(float dir) {
-		super.setDir(dir);
-		calcAngles();
-	}
+    private float add(float a, float change, float max, float padding) {
+        a += change;
+        if (a + padding > max)
+            a = max - padding;
+        else if (a - padding < 0)
+            a = padding;
+        return a;
+    }
+
+    @Override
+    public void setDir(float dir) {
+        super.setDir(dir);
+        calcAngles();
+    }
 
 	private void calcAngles() {
 		// Werte für Boxen an den Seiten an Winkel anpassen
