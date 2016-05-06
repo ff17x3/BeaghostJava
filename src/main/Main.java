@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by Florian on 05.05.2016. 16:48
@@ -25,10 +27,16 @@ public class Main implements FrameInitInterface {
 	private long[] keyDownTimestamp = new long[4];//w,a,s,d
 	private long[] keyUpTimestamp = new long[4];//w,a,s,d
 	private char[] keys = {'w', 'a', 's', 'd'};
+	private int mouseOnscreenX, mouseOnscreenY;
 
 	public Main() {
 		gm = new GameManager(this, mapSize);
 		frame = new DrawFrame(frameSize, this, gm, mapSize);
+
+		Point mp = MouseInfo.getPointerInfo().getLocation();
+		mouseOnscreenX = mp.x;
+		mouseOnscreenY = mp.y;
+
 		gm.startTicking();
 	}
 
@@ -48,9 +56,27 @@ public class Main implements FrameInitInterface {
 				writeTimestamp(e, keyUpTimestamp);
 			}
 		});
+		f.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				super.mouseMoved(e);
+				mouseMove(e);
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				super.mouseDragged(e);
+				mouseMoved(e);
+			}
+		});
 	}
 
-	private void writeTimestamp(KeyEvent e, long[] keyTimestamp) {
+	private synchronized void mouseMove(MouseEvent e) {
+		mouseOnscreenX = e.getX();
+		mouseOnscreenY = e.getY();
+	}
+
+	private synchronized void writeTimestamp(KeyEvent e, long[] keyTimestamp) {
 		char key = e.getKeyChar();
 		int i = 0;
 		while (i < keys.length && key != keys[i]) {
@@ -65,11 +91,19 @@ public class Main implements FrameInitInterface {
 		return frame;
 	}
 
-	public long[] getKeyDownTimestamp() {
+	public synchronized int getMouseOnscreenX() {
+		return mouseOnscreenX;
+	}
+
+	public synchronized int getMouseOnscreenY() {
+		return mouseOnscreenY;
+	}
+
+	public synchronized long[] getKeyDownTimestamp() {
 		return keyDownTimestamp;
 	}
 
-	public long[] getKeyUpTimestamp() {
+	public synchronized long[] getKeyUpTimestamp() {
 		return keyUpTimestamp;
 	}
 }

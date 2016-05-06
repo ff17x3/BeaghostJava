@@ -54,7 +54,7 @@ public class GameManager implements DrawInferface { // bla
 	@Override
 	public void draw(Graphics g1, float s) {
 		Graphics2D g = (Graphics2D) g1;
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, tfm(mapSize.getWidth(), s), tfm(mapSize.getHeight(), s));
 		g.setColor(Color.RED);
@@ -62,7 +62,7 @@ public class GameManager implements DrawInferface { // bla
 			robot.draw(g, s);
 		}
 		g.setColor(Color.BLUE);
-		player.draw(g,s);
+		player.draw(g, s);
 	}
 
 
@@ -84,6 +84,14 @@ public class GameManager implements DrawInferface { // bla
 
 	public long[] getKeyUpTimestamp() {
 		return main.getKeyUpTimestamp();
+	}
+
+	public int getMouseOnscreenX() {
+		return main.getMouseOnscreenX();
+	}
+
+	public int getMouseOnscreenY() {
+		return main.getMouseOnscreenY();
 	}
 
 	private static int tfm(double x, float scale) {

@@ -12,6 +12,7 @@ public class Player extends Entity implements Entity.Tickable {
 
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
+	private float lastScale;
 
 	// drawing#####################
 	private float radius, r2, distA, distB;
@@ -47,6 +48,7 @@ public class Player extends Entity implements Entity.Tickable {
 
 	@Override
 	public synchronized void draw(Graphics g, float scale) {
+		lastScale = scale;
 		g.fillOval(tfm(x - RADIUS, scale), tfm(y - RADIUS, scale), tfm(2 * RADIUS, scale), tfm(2 * RADIUS, scale));
 
 		// TODO Colors
@@ -77,6 +79,7 @@ public class Player extends Entity implements Entity.Tickable {
 		keyDownTimestamp = gm.getKeyDownTimestamp();
 
 		tickTimestamp = System.nanoTime();
+		updateDir();
 
 		for (int key = 0; key < keyUpTimestamp.length; key++) {
 
@@ -92,6 +95,12 @@ public class Player extends Entity implements Entity.Tickable {
 		}
 
 		lastTickTimestamp = tickTimestamp;
+	}
+
+	private void updateDir() {
+		float mouseX = gm.getMouseOnscreenX() / lastScale;
+		float mouseY = gm.getMouseOnscreenY() / lastScale;
+		dir = (float) Math.tan((mouseY - y) / (mouseX - x));
 	}
 
 	/**
