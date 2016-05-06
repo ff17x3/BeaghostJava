@@ -15,7 +15,7 @@ public class GameManager implements DrawInferface { // bla
 
     // params:
     public static final int FPS = 60;
-    public static final int robotCount = 10;
+    public static final int robotCount = 100;
 
 
     //vars
