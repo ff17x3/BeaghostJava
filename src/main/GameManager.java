@@ -52,7 +52,9 @@ public class GameManager implements DrawInferface { // bla
 	}
 
 	@Override
-	public void draw(Graphics g, float s) {
+	public void draw(Graphics g1, float s) {
+		Graphics2D g = (Graphics2D) g1;
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, tfm(mapSize.getWidth(), s), tfm(mapSize.getHeight(), s));
 		g.setColor(Color.RED);
