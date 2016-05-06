@@ -24,13 +24,13 @@ public class Player extends Entity implements Entity.Tickable {
 
 	static {
 		ANGLES = new float[6];
-		ANGLES[0] = a;
-		ANGLES[1] = (float) Math.PI - a;
-		ANGLES[2] = (float) Math.PI + a;
-		ANGLES[3] = 2 * (float) Math.PI - a;
+		ANGLES[0] = (float) Math.PI / 2 + a;
+		ANGLES[1] = 3 * (float) Math.PI / 2 - a;
+		ANGLES[2] = 3 * (float) Math.PI / 2 + a;
+		ANGLES[3] = (float) Math.PI / 2 - a;
 
-		ANGLES[4] = 0f;
-		ANGLES[5] = (float) Math.PI;
+		ANGLES[4] = (float) Math.PI / 2;
+		ANGLES[5] = 3 * (float) Math.PI / 2;
 	}
 	// ########################
 
@@ -49,8 +49,6 @@ public class Player extends Entity implements Entity.Tickable {
 	@Override
 	public synchronized void draw(Graphics g, float scale) {
 		lastScale = scale;
-		g.fillOval(tfm(x - RADIUS, scale), tfm(y - RADIUS, scale), tfm(2 * RADIUS, scale), tfm(2 * RADIUS, scale));
-
 		// TODO Colors
 		g.setColor(Color.DARK_GRAY);
 		// shoulders 1
@@ -66,6 +64,10 @@ public class Player extends Entity implements Entity.Tickable {
 		// center circle
 		g.setColor(Color.GRAY);
 		g.fillOval(tfm(x - radius, scale), tfm(y - radius, scale), tfm(2 * radius, scale), tfm(2 * radius, scale));
+
+		// TODO remove
+		g.setColor(Color.RED);
+		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
 	}
 
 	private static int tfm(double v, float scale) {
@@ -101,7 +103,6 @@ public class Player extends Entity implements Entity.Tickable {
 		float mouseX = gm.getMouseOnscreenX() / lastScale;
 		float mouseY = gm.getMouseOnscreenY() / lastScale;
 		setDir((float) Math.atan2((mouseY - y) , (mouseX - x)));
-
 	}
 
 	/**
@@ -145,5 +146,10 @@ public class Player extends Entity implements Entity.Tickable {
 			angleSins[i] = (float) Math.sin(actangle);
 			angleCosins[i] = (float) Math.cos(actangle);
 		}
+	}
+
+	public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
+		g.drawLine(middle.x - halfBoxSize, middle.y - halfBoxSize, middle.x + halfBoxSize, middle.y + halfBoxSize);
+		g.drawLine(middle.x - halfBoxSize, middle.y + halfBoxSize, middle.x + halfBoxSize, middle.y - halfBoxSize);
 	}
 }
