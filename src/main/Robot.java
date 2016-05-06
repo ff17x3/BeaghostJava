@@ -51,17 +51,17 @@ public class Robot extends Entity implements Entity.Tickable {
 		// Blöcke links und rechts
 		// rechter Block
 		poly.reset();
-		poly.addPoint(Math.round(angleCosins[0] * distA * scale + x * scale), Math.round(angleSins[0] * distA * scale + y * scale));
-		poly.addPoint(Math.round(angleCosins[1] * distB * scale + x * scale), Math.round(angleSins[1] * distB * scale + y * scale));
-		poly.addPoint(Math.round(angleCosins[2] * distB * scale + x * scale), Math.round(angleSins[2] * distB * scale + y * scale));
-		poly.addPoint(Math.round(angleCosins[3] * distA * scale + x * scale), Math.round(angleSins[3] * distA * scale + y * scale));
+		poly.addPoint(Math.round((angleCosins[0] * distA + x) * scale), Math.round((angleSins[0] * distA + y) * scale));
+		poly.addPoint(Math.round((angleCosins[1] * distB + x) * scale), Math.round((angleSins[1] * distB + y) * scale));
+		poly.addPoint(Math.round((angleCosins[2] * distB + x) * scale), Math.round((angleSins[2] * distB + y) * scale));
+		poly.addPoint(Math.round((angleCosins[3] * distA + x) * scale), Math.round((angleSins[3] * distA + y) * scale));
 		g.fillPolygon(poly);
 		// linker Block
 		poly.reset();
-		poly.addPoint(Math.round(angleCosins[4] * distA * scale + x * scale), Math.round(angleSins[4] * distA * scale + y * scale));
-		poly.addPoint(Math.round(angleCosins[5] * distB * scale + x * scale), Math.round(angleSins[5] * distB * scale + y * scale));
-		poly.addPoint(Math.round(angleCosins[6] * distB * scale + x * scale), Math.round(angleSins[6] * distB * scale + y * scale));
-		poly.addPoint(Math.round(angleCosins[7] * distA * scale + x * scale), Math.round(angleSins[7] * distA * scale + y * scale));
+		poly.addPoint(Math.round((angleCosins[4] * distA + x) * scale), Math.round((angleSins[4] * distA + y) * scale));
+		poly.addPoint(Math.round((angleCosins[5] * distB + x) * scale), Math.round((angleSins[5] * distB + y) * scale));
+		poly.addPoint(Math.round((angleCosins[6] * distB + x) * scale), Math.round((angleSins[6] * distB + y) * scale));
+		poly.addPoint(Math.round((angleCosins[7] * distA + x) * scale), Math.round((angleSins[7] * distA + y) * scale));
 		g.fillPolygon(poly);
 		// sichtfeld TODO
 		// Körper

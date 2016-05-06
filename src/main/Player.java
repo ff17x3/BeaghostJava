@@ -13,37 +13,60 @@ public class Player extends Entity implements Entity.Tickable {
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
 
-	// drawing
-	float radius, distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
-	float[] angleSins, angleCosins;
+	// drawing#####################
+	private float radius, r2, distA, distB;
+	private float[] angleSins, angleCosins;
+	private Polygon poly;
 
-	static float a = (float) Math.atan(1 / 3d);
-	static final float[] ANGLES;
+	private static float a = (float) Math.atan(1 / 3d);
+	private static final float[] ANGLES;
 
 	static {
-		ANGLES = new float[4];
+		ANGLES = new float[6];
 		ANGLES[0] = a;
 		ANGLES[1] = (float) Math.PI - a;
 		ANGLES[2] = (float) Math.PI + a;
 		ANGLES[3] = 2 * (float) Math.PI - a;
+
+		ANGLES[4] = 0f;
+		ANGLES[5] = (float) Math.PI;
 	}
+	// ########################
 
 	public Player(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
-		radius = 10;
+		radius = RADIUS;
+		r2 = radius / 2;
 		angleSins = new float[4];
 		angleCosins = new float[4];
+		poly = new Polygon();
 		distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
+		distB = radius * 1.5f;
 		calcAngles();
 	}
 
 	@Override
-	public void draw(Graphics g, float s) {
-		g.fillOval(tfm(x - RADIUS, s), tfm(y - RADIUS, s), tfm(2 * RADIUS, s), tfm(2 * RADIUS, s));
+	public void draw(Graphics g, float scale) {
+		g.fillOval(tfm(x - RADIUS, scale), tfm(y - RADIUS, scale), tfm(2 * RADIUS, scale), tfm(2 * RADIUS, scale));
+
+		// TODO Colors
+		g.setColor(Color.DARK_GRAY);
+		// shoulders 1
+		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), Math.round(radius), Math.round(radius));
+		// shoulders 2
+		poly.reset();
+		poly.addPoint(tfm(angleCosins[0] * distA + x, scale), tfm(angleSins[0] * distA + y, scale));
+		poly.addPoint(tfm(angleCosins[1] * distA + x, scale), tfm(angleSins[1] * distA + y, scale));
+		poly.addPoint(tfm(angleCosins[2] * distA + x, scale), tfm(angleSins[2] * distA + y, scale));
+		poly.addPoint(tfm(angleCosins[3] * distA + x, scale), tfm(angleSins[3] * distA + y, scale));
+		g.fillPolygon(poly);
+		// center circle
+		g.setColor(Color.GRAY);
+		g.fillOval(tfm(x - radius, scale), tfm(y - radius, scale), tfm(2 * radius, scale), tfm(2 * radius, scale));
 	}
 
-	private static int tfm(double x, float scale) {
-		return (int) Math.round(scale * x);
+	private static int tfm(double v, float scale) {
+		return (int) Math.round(scale * v);
 	}
 
 	@Override
