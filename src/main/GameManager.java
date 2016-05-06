@@ -14,8 +14,8 @@ public class GameManager implements DrawInferface { // bla
 
 
     // params:
-    public static final int FPS = 60;
-    public static final int robotCount = 100;
+    public static final int FPS = 30;
+    public static final int robotCount = 10;
 
 
     //vars
@@ -24,6 +24,10 @@ public class GameManager implements DrawInferface { // bla
     private ArrayList<Robot> robots = new ArrayList<>();
     private Player player;
     private DimensionF mapSize;
+    private int counter = 0;
+    private long timeOld = System.nanoTime(), time;
+    private int inteval = 60;
+    private long[] times = new long[inteval];
 
     public GameManager(Main main, DimensionF mapSize) {
         this.main = main;
@@ -33,7 +37,18 @@ public class GameManager implements DrawInferface { // bla
         spawnRobots(robotCount);
         player = new Player(200, 200, 0, this);
         System.out.println("spawend " + robotCount + " Robots");
-        drawClock = new ClockNano(FPS, millisDelta -> main.getFrame().redraw());
+        drawClock = new ClockNano(FPS, millisDelta -> {
+            main.getFrame().redraw();
+            times[counter] = System.nanoTime();
+            if (counter == inteval) {
+                time = System.nanoTime();
+                System.out.println("FPS(draw): " + (1f*inteval / (time - timeOld) * 1e9));
+                timeOld = time;
+                counter = 0;
+            } else {
+                counter++;
+            }
+        });
         tickClock = new ClockNano(FPS, millisDelta -> {
             for (Robot r : robots) {
                 r.tick();
@@ -53,7 +68,7 @@ public class GameManager implements DrawInferface { // bla
             do {
                 x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
                 y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
-            } while (isFree(x, y, RADIUS));
+            } while (!isFree(x, y, RADIUS));
             dir = (float) (Math.random() * (2 * Math.PI));
             robots.add(new Robot(x, y, dir, this));
         }
