@@ -22,6 +22,7 @@ public class Player extends Entity implements Entity.Tickable {
     private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
 
     // drawing#####################
+    private float angleTick;// in welche Richtung bewegt sich der Player in diesem Tick
     private float lastScale;
     private final float radius, distA, distB;
     private float[] angleSins, angleCosins;
@@ -88,7 +89,8 @@ public class Player extends Entity implements Entity.Tickable {
 
         tickTimestamp = System.nanoTime();
 
-        updateDir();
+        if (controlMode == CM_MOUSE)
+            updateDir();
 
         for (int key = 0; key < keyUpTimestamp.length; key++) {
 
