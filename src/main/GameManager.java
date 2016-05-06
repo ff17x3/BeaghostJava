@@ -14,7 +14,7 @@ public class GameManager implements DrawInferface { // bla
 
 
     // params:
-    public static final int FPS = 30;
+    public static final int FPS = 60;
     public static final int robotCount = 10;
 
 
@@ -25,9 +25,11 @@ public class GameManager implements DrawInferface { // bla
     private Player player;
     private DimensionF mapSize;
     private int counter = 0;
-    private long timeOld = System.nanoTime(), time;
+    //    private long timeOld = System.nanoTime(), time;
     private int inteval = 60;
     private long[] times = new long[inteval];
+    private float avg = 0;
+    private int avgcount = 0;
 
     public GameManager(Main main, DimensionF mapSize) {
         this.main = main;
@@ -39,13 +41,13 @@ public class GameManager implements DrawInferface { // bla
         System.out.println("spawend " + robotCount + " Robots");
         drawClock = new ClockNano(FPS, millisDelta -> {
             main.getFrame().redraw();
-            times[counter] = System.nanoTime();
+
             if (counter == inteval) {
-                time = System.nanoTime();
-                System.out.println("FPS(draw): " + (1f*inteval / (time - timeOld) * 1e9));
-                timeOld = time;
+                printTimes();
+//                timeOld = time;
                 counter = 0;
             } else {
+                times[counter] = System.nanoTime();
                 counter++;
             }
         });
@@ -56,6 +58,22 @@ public class GameManager implements DrawInferface { // bla
             player.tick();
         });
 
+    }
+
+    private void printTimes() {
+        new Thread() {
+            public void run() {
+                for (int i = 1; i < times.length; i++) {
+                    float t = (float) ((times[i] - times[i - 1]) * 1e-6);
+                    avg = (avg * avgcount + t) / (avgcount + 1);
+                    avgcount++;
+                    if (t > 1.2 * avg)
+                        System.out.println("FRAMEDROP: " + t + "ms needed (avg: " + avg + ")");
+
+                }
+
+            }
+        }.start();
     }
 
     private void spawnRobots(int robotCount) {
