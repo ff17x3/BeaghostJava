@@ -100,7 +100,8 @@ public class Player extends Entity implements Entity.Tickable {
 	private void updateDir() {
 		float mouseX = gm.getMouseOnscreenX() / lastScale;
 		float mouseY = gm.getMouseOnscreenY() / lastScale;
-		dir = (float) Math.tan((mouseY - y) / (mouseX - x));
+		setDir((float) Math.atan2((mouseY - y) , (mouseX - x)));
+
 	}
 
 	/**
@@ -133,12 +134,6 @@ public class Player extends Entity implements Entity.Tickable {
 	@Override
 	public void setDir(float dir) {
 		super.setDir(dir);
-		calcAngles();
-	}
-
-	@Override
-	public void changeDir(float change) {
-		super.changeDir(change);
 		calcAngles();
 	}
 
