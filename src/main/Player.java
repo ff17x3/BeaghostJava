@@ -10,9 +10,6 @@ public class Player extends Entity implements Entity.Tickable {
 	// movement
 	private float speed_ps = 100;
 
-	// others
-	private float view_arc = (float) Math.PI / 2;
-
 	// keys
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
@@ -33,14 +30,14 @@ public class Player extends Entity implements Entity.Tickable {
 		ANGLES[2] = 3 * (float) Math.PI / 2 + a;
 		ANGLES[3] = (float) Math.PI / 2 - a;
 
-        ANGLES[4] = (float) Math.PI / 2;
-        ANGLES[5] = 3 * (float) Math.PI / 2;
-    }
-    // ########################
+		ANGLES[4] = (float) Math.PI / 2;
+		ANGLES[5] = 3 * (float) Math.PI / 2;
+	}
+	// ########################
 
 	public Player(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
-		radius = 20; // hardcode
+		radius = 10; // hardcode
 		angleSins = new float[6];
 		angleCosins = new float[6];
 		poly = new Polygon();
@@ -53,8 +50,7 @@ public class Player extends Entity implements Entity.Tickable {
 	public synchronized void draw(Graphics g, float scale) {
 		lastScale = scale;
 		// TODO Colors
-		// view sector
-		//shoulders
+		// shoulders
 		g.setColor(Color.DARK_GRAY);
 		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
 		g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2, scale), tfm(angleSins[5] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
@@ -152,15 +148,15 @@ public class Player extends Entity implements Entity.Tickable {
 		calcAngles();
 	}
 
-    private void calcAngles() {
-        // Werte für Boxen an den Seiten an Winkel anpassen
-        for (int i = 0; i < ANGLES.length; i++) {
-            float actangle = dir + ANGLES[i];
-            actangle %= 2 * Math.PI;
-            angleSins[i] = (float) Math.sin(actangle);
-            angleCosins[i] = (float) Math.cos(actangle);
-        }
-    }
+	private void calcAngles() {
+		// Werte für Boxen an den Seiten an Winkel anpassen
+		for (int i = 0; i < ANGLES.length; i++) {
+			float actangle = dir + ANGLES[i];
+			actangle %= 2 * Math.PI;
+			angleSins[i] = (float) Math.sin(actangle);
+			angleCosins[i] = (float) Math.cos(actangle);
+		}
+	}
 
 //	public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
 //		g.drawLine(middle.x - halfBoxSize, middle.y - halfBoxSize, middle.x + halfBoxSize, middle.y + halfBoxSize);

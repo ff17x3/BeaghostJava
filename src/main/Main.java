@@ -69,6 +69,7 @@ public class Main implements FrameInitInterface {
 				mouseMoved(e);
 			}
 		});
+		f.setLocation(100, 100);
 	}
 
 	private synchronized void mouseMove(MouseEvent e) {
