@@ -97,4 +97,8 @@ public class GameManager implements DrawInferface { // bla
 	private static int tfm(double x, float scale) {
 		return (int) Math.round(scale * x);
 	}
+
+	public float getMapWidth() {
+		return mapSize.getWidth();
+	}
 }
