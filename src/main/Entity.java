@@ -28,8 +28,13 @@ public abstract class Entity implements DrawInferface {
         dir %= 2 * Math.PI;
     }
 
-    public void setDir(float dir) {
-        this.dir = dir;
+	protected static int tfm(double v, float scale) {
+		return (int) Math.round(scale * v);
+	}
+
+	public void setDir(float dir) {
+		this.dir = dir;
     }
+
 
 }

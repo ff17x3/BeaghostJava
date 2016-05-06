@@ -73,10 +73,6 @@ public class Player extends Entity implements Entity.Tickable {
 //		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
     }
 
-    private static int tfm(double v, float scale) {
-        return (int) Math.round(scale * v);
-    }
-
     @Override
     public synchronized void tick() {
         // move Player when keys pressed
