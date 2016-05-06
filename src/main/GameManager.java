@@ -30,10 +30,8 @@ public class GameManager implements DrawInferface { // bla
 
 		//fills the ArrayList robots
 		spawnRobots(robotCount);
-		System.out.println("spawend " + robotCount+" Robots");
-		drawClock = new ClockNano(FPS, millisDelta -> {
-			main.getFrame().redraw();
-		});
+		System.out.println("spawend " + robotCount + " Robots");
+		drawClock = new ClockNano(FPS, millisDelta -> main.getFrame().redraw());
 		tickClock = new ClockNano(FPS, millisDelta -> {
 			for (Robot r : robots) {
 				r.tick();

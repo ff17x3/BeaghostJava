@@ -10,6 +10,11 @@ public class Player extends Entity implements Entity.Tickable {
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
 
+	// drawing
+	float radius, distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
+
+	static float alpha = (float) Math.atan(1 / 3d);
+
 	private Player(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
 	}
