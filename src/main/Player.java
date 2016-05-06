@@ -3,7 +3,7 @@ package main;
 import java.awt.*;
 
 /**
- * Created by Florian on 05.05.2016.
+ * Created by Florian on 05.05.2016
  */
 public class Player extends Entity implements Entity.Tickable {
 
@@ -15,11 +15,26 @@ public class Player extends Entity implements Entity.Tickable {
 
 	// drawing
 	float radius, distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
+	float[] angleSins, angleCosins;
 
-	static float alpha = (float) Math.atan(1 / 3d);
+	static float a = (float) Math.atan(1 / 3d);
+	static final float[] ANGLES;
+
+	static {
+		ANGLES = new float[4];
+		ANGLES[0] = a;
+		ANGLES[1] = (float) Math.PI - a;
+		ANGLES[2] = (float) Math.PI + a;
+		ANGLES[3] = 2 * (float) Math.PI - a;
+	}
 
 	public Player(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
+		radius = 10;
+		angleSins = new float[4];
+		angleCosins = new float[4];
+		distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
+		calcAngles();
 	}
 
 	@Override
@@ -79,5 +94,27 @@ public class Player extends Entity implements Entity.Tickable {
 
 		x += dx;
 		y += dy;
+	}
+
+	@Override
+	public void setDir(float dir) {
+		super.setDir(dir);
+		calcAngles();
+	}
+
+	@Override
+	public void changeDir(float change) {
+		super.changeDir(change);
+		calcAngles();
+	}
+
+	private void calcAngles() {
+		// Werte für Boxen an den Seiten an Winkel anpassen
+		for (int i = 0; i < ANGLES.length; i++) {
+			float actangle = dir + ANGLES[i];
+			actangle %= 2 * Math.PI;
+			angleSins[i] = (float) Math.sin(actangle);
+			angleCosins[i] = (float) Math.cos(actangle);
+		}
 	}
 }
