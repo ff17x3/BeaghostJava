@@ -56,7 +56,7 @@ public class Main implements FrameInitInterface {
 				writeTimestamp(e, keyUpTimestamp);
 			}
 		});
-		f.addMouseMotionListener(new MouseAdapter() {
+		dp.addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				super.mouseMoved(e);

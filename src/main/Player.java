@@ -49,7 +49,6 @@ public class Player extends Entity implements Entity.Tickable {
     @Override
     public synchronized void draw(Graphics g, float scale) {
         lastScale = scale;
-        g.fillOval(tfm(x - RADIUS, scale), tfm(y - RADIUS, scale), tfm(2 * RADIUS, scale), tfm(2 * RADIUS, scale));
 
         // TODO Colors
         g.setColor(Color.DARK_GRAY);
@@ -127,11 +126,20 @@ public class Player extends Entity implements Entity.Tickable {
         float dy = (float) (Math.sin(angle) * dis);
         float dx = (float) (Math.cos(angle) * dis);
 
-        x += dx;
-        y += dy;
-        if (x > gm.getMapWidth())
-            x = gm.getMapWidth()-;
+        x = add(x, dx, gm.getMapWidth(), 2 * radius);
+        y = add(y, dy, gm.getMapHeight(), 2 * radius);
+        if (x + 2 * radius > gm.getMapWidth())
+            x = gm.getMapWidth() - 2 * radius;
 
+    }
+
+    private float add(float a, float change, float max, float padding) {
+        a += change;
+        if (a + padding > max)
+            a = max - padding;
+        else if (a - padding < 0)
+            a = padding;
+        return a;
     }
 
     @Override

@@ -101,4 +101,8 @@ public class GameManager implements DrawInferface { // bla
 	public float getMapWidth() {
 		return mapSize.getWidth();
 	}
+
+	public float getMapHeight() {
+		return mapSize.getHeight();
+	}
 }
