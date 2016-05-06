@@ -32,6 +32,7 @@ public class Main implements FrameInitInterface {
 	public Main() {
 		gm = new GameManager(this, mapSize);
 		frame = new DrawFrame(frameSize, this, gm, mapSize);
+		frame.addScaleChangeListener(gm);
 
 		Point mp = MouseInfo.getPointerInfo().getLocation();
 		mouseOnscreenX = mp.x;
