@@ -18,13 +18,13 @@ public class Player extends Entity implements Entity.Tickable {
 
 	static float alpha = (float) Math.atan(1 / 3d);
 
-	private Player(float x, float y, float dir, GameManager gm) {
+	public Player(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
 	}
 
 	@Override
 	public void draw(Graphics g, float s) {
-		g.drawOval(tfm(x - RADIUS, s), tfm(y - RADIUS, s), tfm(2 * RADIUS, s), tfm(2 * RADIUS, s));
+		g.fillOval(tfm(x - RADIUS, s), tfm(y - RADIUS, s), tfm(2 * RADIUS, s), tfm(2 * RADIUS, s));
 	}
 
 	private static int tfm(double x, float scale) {
