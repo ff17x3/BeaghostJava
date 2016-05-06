@@ -48,14 +48,23 @@ public class GameManager implements DrawInferface { // bla
         float mapHeight = mapSize.getHeight();
         float RADIUS = Robot.RADIUS;
 
+        float x, y, dir;
         for (int i = 0; i < robotCount; i++) {
-
-            float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
-            float y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
-            float dir = (float) (Math.random() * (2 * Math.PI));
-
+            do {
+                x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
+                y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
+            } while (isFree(x, y, RADIUS));
+            dir = (float) (Math.random() * (2 * Math.PI));
             robots.add(new Robot(x, y, dir, this));
         }
+    }
+
+    private boolean isFree(float x, float y, float radius) {
+        for (Robot r : robots) {
+            if (Math.sqrt(Math.pow((r.x - x), 2) + Math.pow((r.y - y), 2)) <= 2 * radius)
+                return false;
+        }
+        return true;
     }
 
     private void spawnRobots() {
