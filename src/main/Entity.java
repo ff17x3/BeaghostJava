@@ -9,8 +9,9 @@ import util.ScaleChangeListener;
 public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	protected float scale;
 	protected float speedGUPS;
+	protected float boundingRadius;
 
-	public interface Tickable{
+	public interface Tickable {
 		void tick();
 	}
 
@@ -32,6 +33,15 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 		dir %= 2 * Math.PI;
 	}
 
+	protected void moveDir(float time) {
+		float dis = (float) (speedGUPS * time / 1e9);
+		float dy = (float) (Math.sin(dir) * dis);
+		float dx = (float) (Math.cos(dir) * dis);
+
+		x += dx;
+		y += dy;
+	}
+
 	protected int tfm(double v) {
 		return (int) Math.round(scale * v);
 	}
@@ -44,9 +54,9 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 		return x;
 	}
 
-    public float getY() {
-        return y;
-    }
+	public float getY() {
+		return y;
+	}
 
 	@Override
 	public void onScaleChange(float scale) {

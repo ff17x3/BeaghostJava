@@ -11,7 +11,6 @@ public class Player extends Entity implements Entity.Tickable {
 	public static final int CM_KEYS = 0, CM_MOUSE = 1;
 
 	// movement
-	private float speed_ps = 100;
 	private float spawnPrtRadius = 100f;
 	private long weaponCooldown = (long) 3e9;
 
@@ -62,6 +61,8 @@ public class Player extends Entity implements Entity.Tickable {
 		super(x, y, dir, gm);
 		angleSins = new float[ANGLES.length];
 		angleCosins = new float[ANGLES.length];
+		boundingRadius = RADIUS * 1.5f;
+		speedGUPS = 100;
 		poly = new Polygon();
 		calcAngles();
 	}
@@ -201,13 +202,14 @@ public class Player extends Entity implements Entity.Tickable {
 			moveDir(time);
 	}
 
-	private void moveDir(float time) {
-		float dis = (float) (speed_ps * time / 1e9);
+	@Override
+	protected void moveDir(float time) {
+		float dis = (float) (speedGUPS * time / 1e9);
 		float dy = (float) (Math.sin(dir) * dis);
 		float dx = (float) (Math.cos(dir) * dis);
 
-		float newX = add(x, dx, gm.getMapWidth(), 2 * RADIUS);
-		float newY = add(y, dy, gm.getMapHeight(), 2 * RADIUS);
+		float newX = add(x, dx, gm.getMapWidth(), 2 * boundingRadius);
+		float newY = add(y, dy, gm.getMapHeight(), 2 * boundingRadius);
 
 		if (Math.signum(x - mouseX) != Math.signum(newX - mouseX))
 			newX = mouseX;

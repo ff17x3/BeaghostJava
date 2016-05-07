@@ -16,7 +16,7 @@ public class Robot extends Entity implements Entity.Tickable {
 	public static final float RADIUS = 10;
 	private static BufferedImage deadTexture;
 	private static final long bloodVisibilityTime = 4000;
-	public static final float SIZE_RAD = 7f / 4 * RADIUS;
+
 	private static final float
 			distA = (float) (Math.sqrt(2) * RADIUS),
 			distB = (float) (Math.sqrt(4.0625) * RADIUS);
@@ -53,12 +53,12 @@ public class Robot extends Entity implements Entity.Tickable {
 	private long dieMillis;
 
 
-
 	public Robot(float x, float y, float dir, GameManager gm) {
 		// TODO body color
 		super(x, y, dir, gm);
 		angleSins = new float[8];
 		angleCosins = new float[8];
+		boundingRadius = 7f / 4 * RADIUS;
 		calcAngles();
 
 		onScaleChange(1f);
