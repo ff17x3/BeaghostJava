@@ -37,8 +37,13 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public void tick(long nanos) {
 		super.tick(nanos);
 		if (state != SLEEP && sees(gm.getPlayer())) {
-			attention += 0.1f;
-			setLineToAtLvl();
+
+			if (attention < MAX_ATTENTION) {
+				attention += 0.1f;
+				if (attention > MAX_ATTENTION)
+					attention = MAX_ATTENTION;
+				setLineToAtLvl();
+			}
 
 		} else if (attention > 0) {
 			attention = add(attention, -0.005f, Float.MAX_VALUE, 0);
