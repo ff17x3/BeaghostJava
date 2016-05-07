@@ -124,7 +124,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 			dir = (float) (Math.random() * (2 * Math.PI));
 			robots.add(new Robot(x, y, dir, this));
 		}
-		robots.add(new KIRobot1(200, 200, 0, this));
+		robots.add(new KIRobot1(100, 100, 0, this));
 	}
 
 	private boolean isFree(float x, float y, float size) {

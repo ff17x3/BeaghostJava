@@ -13,6 +13,7 @@ public class Player extends Entity implements Entity.Tickable {
 	// movement
 	private float speed_ps = 100;
 	private float spawnPrtRadius = 100f;
+	private long weaponCooldown = (long) 3e9;
 
 	// keys
 	private long[] keyUpTimestamp, keyDownTimestamp;
@@ -29,8 +30,9 @@ public class Player extends Entity implements Entity.Tickable {
 	private float[] angleSins, angleCosins;
 	private Polygon poly;
 	private final long weaponShowTime = (long) (0.3 * 1e9);
-	private long weaponShowStartTime;
 	private boolean isPunching;
+	private boolean isCooldownRunning;
+	private long weaponShowStartTime;
 
 	private static final float[] ANGLES;
 
@@ -97,6 +99,13 @@ public class Player extends Entity implements Entity.Tickable {
 						tfm(radius),
 						tfm(radius));
 				g2d.setStroke(new BasicStroke(1f));
+			}
+		}
+		if (isCooldownRunning) {
+			if ((System.nanoTime() - weaponShowStartTime) > weaponCooldown) {
+				isCooldownRunning = false;
+			} else {
+				d
 			}
 		}
 	}
@@ -216,8 +225,12 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	public void punchStart() {
-		weaponShowStartTime = System.nanoTime();
-		isPunching = true;
+		long time = System.nanoTime();
+		if (time - weaponShowStartTime >= weaponCooldown) {
+			weaponShowStartTime = time;
+			isPunching = true;
+			isCooldownRunning = true;
+		}
 	}
 
 	public float getSpawnPrtRadius() {
