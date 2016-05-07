@@ -70,6 +70,12 @@ public class Player extends Entity implements Entity.Tickable {
 	public synchronized void draw(Graphics g, float scale) {
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
+		float dash1[] = {10.0f};
+		BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2f, dash1, 0.0f);
+		((Graphics2D) g).setStroke(dashed);
+		g.drawLine(0, 0, 300, 300);
+
+
 		g.fillOval(tfm(angleCosins[4] * distB + x - RADIUS / 2), tfm(angleSins[4] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));
 		g.fillOval(tfm(angleCosins[5] * distB + x - RADIUS / 2), tfm(angleSins[5] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));
 		poly.reset();
