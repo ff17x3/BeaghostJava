@@ -1,7 +1,5 @@
 package main;
 
-import util.ScaleChangeListener;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Arc2D;
@@ -12,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Max on 05.05.2016
  */
-public class Robot extends Entity implements ScaleChangeListener, Entity.Tickable {
+public class Robot extends Entity implements Entity.Tickable {
 	// statische Winkel für Boxen-----------------------------------------------
 	private static final float[] ANGLES; // Winkel für Ecken von Boxen
 	private static final float RADIUS = 10;
@@ -80,17 +78,17 @@ public class Robot extends Entity implements ScaleChangeListener, Entity.Tickabl
 			g.setColor(Color.BLACK);
 			// rechter Block
 			poly.reset();
-			poly.addPoint(Math.round((angleCosins[0] * distA + x) * scale), Math.round((angleSins[0] * distA + y) * scale));
-			poly.addPoint(Math.round((angleCosins[1] * distB + x) * scale), Math.round((angleSins[1] * distB + y) * scale));
-			poly.addPoint(Math.round((angleCosins[2] * distB + x) * scale), Math.round((angleSins[2] * distB + y) * scale));
-			poly.addPoint(Math.round((angleCosins[3] * distA + x) * scale), Math.round((angleSins[3] * distA + y) * scale));
+			poly.addPoint(tfm(angleCosins[0] * distA + x), tfm(angleSins[0] * distA + y));
+			poly.addPoint(tfm(angleCosins[1] * distB + x), tfm(angleSins[1] * distB + y));
+			poly.addPoint(tfm(angleCosins[2] * distB + x), tfm(angleSins[2] * distB + y));
+			poly.addPoint(tfm(angleCosins[3] * distA + x), tfm(angleSins[3] * distA + y));
 			g.fillPolygon(poly);
 			// linker Block
 			poly.reset();
-			poly.addPoint(Math.round((angleCosins[4] * distA + x) * scale), Math.round((angleSins[4] * distA + y) * scale));
-			poly.addPoint(Math.round((angleCosins[5] * distB + x) * scale), Math.round((angleSins[5] * distB + y) * scale));
-			poly.addPoint(Math.round((angleCosins[6] * distB + x) * scale), Math.round((angleSins[6] * distB + y) * scale));
-			poly.addPoint(Math.round((angleCosins[7] * distA + x) * scale), Math.round((angleSins[7] * distA + y) * scale));
+			poly.addPoint(tfm(angleCosins[4] * distA + x), tfm(angleSins[4] * distA + y));
+			poly.addPoint(tfm(angleCosins[5] * distB + x), tfm(angleSins[5] * distB + y));
+			poly.addPoint(tfm(angleCosins[6] * distB + x), tfm(angleSins[6] * distB + y));
+			poly.addPoint(tfm(angleCosins[7] * distA + x), tfm(angleSins[7] * distA + y));
 			g.fillPolygon(poly);
 			// view sector
 			g.setColor(new Color(255, 255, 0, 100));
@@ -101,7 +99,7 @@ public class Robot extends Entity implements ScaleChangeListener, Entity.Tickabl
 			g.fillOval(Math.round((x - RADIUS) * scale), Math.round((y - RADIUS) * scale), Math.round(RADIUS * 2 * scale), Math.round(RADIUS * 2 * scale));
 		} else {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, textureAlpha));
-			g.drawImage(deadTextureS, tfm(x, scale) - deadTextureS.getWidth(null) / 2, tfm(y, scale) - deadTextureS.getHeight(null) / 2, null);
+			g.drawImage(deadTextureS, tfm(x) - deadTextureS.getWidth(null) / 2, tfm(y) - deadTextureS.getHeight(null) / 2, null);
 			((Graphics2D) g).setComposite(AlphaComposite.Clear);
 		}
 	}
@@ -137,13 +135,6 @@ public class Robot extends Entity implements ScaleChangeListener, Entity.Tickabl
 	}
 
 	@Override
-	public void onScaleChange(float scale) {
-		if (deadTexture != null) {
-			deadTextureS = deadTexture.getScaledInstance(Math.round(RADIUS * 8 * scale), -1, Image.SCALE_FAST);
-		}
-	}
-
-	@Override
 	public void tick() {
 		if (isDead) {
 			textureAlpha = 1 - ((System.currentTimeMillis() - dieMillis) / (float) bloodVisibilityTime);
@@ -151,6 +142,14 @@ public class Robot extends Entity implements ScaleChangeListener, Entity.Tickabl
 				textureAlpha = 0f;
 				gm.remove(this);
 			}
+		}
+	}
+
+	@Override
+	public void onScaleChange(float scale) {
+		super.onScaleChange(scale);
+		if (deadTexture != null) {
+			deadTextureS = deadTexture.getScaledInstance(Math.round(RADIUS * 8 * scale), -1, Image.SCALE_FAST);
 		}
 	}
 }

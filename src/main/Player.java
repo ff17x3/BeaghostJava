@@ -72,34 +72,34 @@ public class Player extends Entity implements Entity.Tickable {
 		// TODO Colors
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
-		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2, scale), tfm(angleSins[4] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
-		g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2, scale), tfm(angleSins[5] * distB + y - radius / 2, scale), tfm(radius, scale), tfm(radius, scale));
+		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2), tfm(angleSins[4] * distB + y - radius / 2), tfm(radius), tfm(radius));
+		g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2), tfm(angleSins[5] * distB + y - radius / 2), tfm(radius), tfm(radius));
 		poly.reset();
-		poly.addPoint(tfm(angleCosins[0] * distA + x, scale), tfm(angleSins[0] * distA + y, scale));
-		poly.addPoint(tfm(angleCosins[1] * distA + x, scale), tfm(angleSins[1] * distA + y, scale));
-		poly.addPoint(tfm(angleCosins[2] * distA + x, scale), tfm(angleSins[2] * distA + y, scale));
-		poly.addPoint(tfm(angleCosins[3] * distA + x, scale), tfm(angleSins[3] * distA + y, scale));
+		poly.addPoint(tfm(angleCosins[0] * distA + x), tfm(angleSins[0] * distA + y));
+		poly.addPoint(tfm(angleCosins[1] * distA + x), tfm(angleSins[1] * distA + y));
+		poly.addPoint(tfm(angleCosins[2] * distA + x), tfm(angleSins[2] * distA + y));
+		poly.addPoint(tfm(angleCosins[3] * distA + x), tfm(angleSins[3] * distA + y));
 		g.fillPolygon(poly);
 		// center circle
 		g.setColor(Color.GRAY);
-		g.fillOval(tfm(x - radius, scale), tfm(y - radius, scale), tfm(2 * radius, scale), tfm(2 * radius, scale));
+		g.fillOval(tfm(x - radius), tfm(y - radius), tfm(2 * radius), tfm(2 * radius));
 
 //		g.setColor(Color.RED);
-//		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
+//		drawCross(g, new Point(tfm(x), tfm(y)), 3);
 		if (isPunching) {
 			if ((System.nanoTime() - weaponShowStartTime) > weaponShowTime) {
 				isPunching = false;
 			} else {
 				Graphics2D g2d = ((Graphics2D) g);
 				g2d.setStroke(new BasicStroke(radius / 6));
-				g2d.drawLine(tfm(angleCosins[4]/* todo vllt 5*/ * distB + x, scale),
-						tfm(angleSins[4] * distB + x, scale),
-						tfm(angleCosins[6] * distC + x, scale),
-						tfm(angleSins[6] * distC + y, scale));
-				g2d.fillOval(tfm(angleCosins[6] * distC + x - radius / 4, scale),
-						tfm(angleSins[6] * distC + y - radius / 4, scale),
-						tfm(radius / 2, scale),
-						tfm(radius / 2, scale));
+				g2d.drawLine(tfm(angleCosins[4]/* todo vllt 5*/ * distB + x),
+						tfm(angleSins[4] * distB + y),
+						tfm(angleCosins[6] * distC + x),
+						tfm(angleSins[6] * distC + y));
+				g2d.fillOval(tfm(angleCosins[6] * distC + x - radius / 2),
+						tfm(angleSins[6] * distC + y - radius / 2),
+						tfm(radius),
+						tfm(radius));
 			}
 		}
 	}

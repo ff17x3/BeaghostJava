@@ -1,11 +1,14 @@
 package main;
 
 import util.DrawInferface;
+import util.ScaleChangeListener;
 
 /**
  * Created by Florian on 05.05.2016
  */
-public abstract class Entity implements DrawInferface {
+public abstract class Entity implements DrawInferface, ScaleChangeListener {
+	protected float scale;
+
 	public interface Tickable{
 		void tick();
 	}
@@ -28,7 +31,7 @@ public abstract class Entity implements DrawInferface {
         dir %= 2 * Math.PI;
     }
 
-	protected static int tfm(double v, float scale) {
+	protected int tfm(double v) {
 		return (int) Math.round(scale * v);
 	}
 
@@ -43,4 +46,9 @@ public abstract class Entity implements DrawInferface {
     public float getY() {
         return y;
     }
+
+	@Override
+	public void onScaleChange(float scale) {
+		this.scale = scale;
+	}
 }
