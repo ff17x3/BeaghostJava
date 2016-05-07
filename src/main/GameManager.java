@@ -140,7 +140,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		player.draw(g, s);
 	}
 
-	private static float entf(Entity a, Entity b) {
+	public static float entf(Entity a, Entity b) {
 		return (float) Math.sqrt(Math.pow((a.getX() - b.getX()), 2) + Math.pow((a.getY() - b.getY()), 2));
 	}
 
