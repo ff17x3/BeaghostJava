@@ -118,7 +118,6 @@ public abstract class Robot extends Entity implements Entity.Tickable {
 		// Werte für Boxen an den Seiten an Winkel anpassen
 		for (int i = 0; i < ANGLES.length; i++) {
 			float actangle = getDir() + ANGLES[i];
-			actangle %= 2 * Math.PI;
 			angleSins[i] = (float) Math.sin(actangle);
 			angleCosins[i] = (float) Math.cos(actangle);
 		}

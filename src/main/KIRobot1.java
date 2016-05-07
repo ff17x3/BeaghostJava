@@ -56,7 +56,6 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		switch (state) {
 			case WALK_TO_TARGET:
 				float distance = Math.abs(x - destX) + Math.abs(y - destY);
-				System.out.println("distance = " + distance);
 				if (distance > 0.5f) {
 					moveDir(nanos);
 				} else {
@@ -67,7 +66,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 			case ROTATE_TO_TARGET:
 				float dirchange = rotationRPS * nanos / 1e9f;
 				changeDir(dirchange);
-				float angleToTarget = ((float) Math.atan2(destY - y, destX - x) % (float) Math.PI * 2f);
+				float angleToTarget = (float) Math.atan2(destY - y, destX - x);
 				if (Math.abs(getDir() - angleToTarget) < 2 * dirchange) {
 					System.out.println("target found!");
 					setDir(angleToTarget);
@@ -131,6 +130,9 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	private void enableRotateToTarget() {
 		destX = (float) Math.random() * gm.getMapWidth();
 		destY = (float) Math.random() * gm.getMapHeight();
+		System.out.print("target: ");
+		System.out.print("destX = " + destX);
+		System.out.println(" destY = " + destY);
 
 		state = ROTATE_TO_TARGET;
 		setDrawViewField(VIEWRAD);
