@@ -100,7 +100,7 @@ public class Robot extends Entity implements Entity.Tickable {
 		} else {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, textureAlpha));
 			g.drawImage(deadTextureS, tfm(x) - deadTextureS.getWidth(null) / 2, tfm(y) - deadTextureS.getHeight(null) / 2, null);
-			((Graphics2D) g).setComposite(AlphaComposite.Clear);
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
 	}
 
