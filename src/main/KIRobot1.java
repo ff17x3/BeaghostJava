@@ -13,7 +13,9 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public static final int MIN_ROTATION_RPS = (int) (Math.PI / 3f), MAX_ROTATION_RPS = (int) (Math.PI);
 	public static final int MIN_SPEED_GUPS = 20, MAX_SPEED_GUPS = 75;
 	public static final float VIEWRAD = RADIUS * 7;
-	public static final float MAX_ATTENTION = 20f;
+	public static final float MAX_ATTENTION = 10f;
+
+	private float kIStrength = 0.6f;
 
 	private int state;
 	private long stateStartNanos, stateDurationNanos;
@@ -40,7 +42,8 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		if (state != SLEEP && sees(gm.getPlayer())) {
 			isSeeing = true;
 			if (attention < MAX_ATTENTION) {
-				attention += 0.1f;
+				attention += kIStrength / 20 * Math.log(1 + GameManager.entf(this, gm.getPlayer()));
+//				System.out.println("attention = " + attention);
 				if (attention > MAX_ATTENTION)
 					attention = MAX_ATTENTION;
 				setLineToAtLvl();
