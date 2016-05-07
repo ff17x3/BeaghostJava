@@ -33,6 +33,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					nextRandomState();
 				break;
 			case ROTATE_TO_TARGET:
+
 				break;
 			case LOOK_AROUND:
 				break;
@@ -48,6 +49,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 	private void nextRandomState() {
 		int state = (int) (Math.random() * 4d);
+		// TODO
 	}
 
 	private void enableRotateToTarget() {
