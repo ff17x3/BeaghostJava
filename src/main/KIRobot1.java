@@ -22,12 +22,15 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	}
 
 	@Override
-	public void tick() {
+	public void tick(long nanos) {
 		super.tick();
-
 		switch (state) {
 			case WALK_TO_TARGET:
-
+				float distance = Math.abs(x - destX) + Math.abs(y - destY);
+				if (distance > 0.5f)
+					moveDir(nanos);
+				else
+					nextRandomState();
 				break;
 			case ROTATE_TO_TARGET:
 				break;
@@ -41,6 +44,10 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		rotationRPS = 0f;
 		speedGUPS = 0f;
 		state = SLEEP;
+	}
+
+	private void nextRandomState() {
+		int state = (int) (Math.random() * 4d);
 	}
 
 	private void enableRotateToTarget() {
