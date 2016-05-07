@@ -45,7 +45,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		spawnRobots(robotCount);
 
 		System.out.println("spawend " + robotCount + " Robots");
-		drawClock = new ClockNano(FPS, millisDelta -> {
+		drawClock = new ClockNano(FPS, nanosDelta -> {
 			main.getFrame().redraw();
 			if (counter == inteval) {
 				printTimes();
