@@ -202,8 +202,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 	}
 
 	public void playerPunch() {
-		player.punchStart();//for drawing
-		playerIsPunching = true;
+		if (player.punchStart())//for drawing
+			playerIsPunching = true;
 	}
 
 	public synchronized void remove(Entity e) {

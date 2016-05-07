@@ -84,28 +84,30 @@ public class Player extends Entity implements Entity.Tickable {
 
 //		g.setColor(Color.RED);
 //		drawCross(g, new Point(tfm(x), tfm(y)), 3);
-		if (isPunching) {
-			if ((System.nanoTime() - weaponShowStartTime) > weaponShowTime) {
-				isPunching = false;
+
+		if (isCooldownRunning) {
+			long time = System.nanoTime();
+			float fakt = 1 - (1f * time - weaponShowStartTime) / weaponCooldown;
+			if (fakt <= 0) {
+				fakt = 0;
+				isCooldownRunning = false;
 			} else {
+				if (isPunching) {
+					if ((time - weaponShowStartTime) > weaponShowTime) {
+						isPunching = false;
+					}
+				}
 				Graphics2D g2d = ((Graphics2D) g);
 				g2d.setStroke(new BasicStroke(RADIUS / 6));
 				g2d.drawLine(tfm(angleCosins[5] * distB + x),
 						tfm(angleSins[5] * distB + y),
-						tfm(angleCosins[6] * distC + x),
-						tfm(angleSins[6] * distC + y));
-				g2d.fillOval(tfm(angleCosins[6] * distC + x - RADIUS / 2),
-						tfm(angleSins[6] * distC + y - RADIUS / 2),
+						tfm(angleCosins[6] * distC * fakt + x),
+						tfm(angleSins[6] * distC * fakt + y));
+				g2d.fillOval(tfm(angleCosins[6] * distC * fakt + x - RADIUS / 2),
+						tfm(angleSins[6] * distC * fakt + y - RADIUS / 2),
 						tfm(RADIUS),
 						tfm(RADIUS));
 				g2d.setStroke(new BasicStroke(1f));
-			}
-		}
-		if (isCooldownRunning) {
-			if ((System.nanoTime() - weaponShowStartTime) > weaponCooldown) {
-				isCooldownRunning = false;
-			} else {
-				d
 			}
 		}
 	}
@@ -224,13 +226,18 @@ public class Player extends Entity implements Entity.Tickable {
 		}
 	}
 
-	public void punchStart() {
+	/**
+	 * @return if move is legit
+	 */
+	public boolean punchStart() {
 		long time = System.nanoTime();
 		if (time - weaponShowStartTime >= weaponCooldown) {
 			weaponShowStartTime = time;
 			isPunching = true;
 			isCooldownRunning = true;
+			return true;
 		}
+		return false;
 	}
 
 	public float getSpawnPrtRadius() {
