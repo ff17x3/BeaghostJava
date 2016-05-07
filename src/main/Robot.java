@@ -12,12 +12,14 @@ import java.io.IOException;
 /**
  * Created by Max on 05.05.2016
  */
-public class Robot extends Entity implements ScaleChangeListener {
+public class Robot extends Entity implements ScaleChangeListener, Entity.Tickable {
 	// statische Winkel für Boxen-----------------------------------------------
 	private static final float[] ANGLES; // Winkel für Ecken von Boxen
 	private static final float RADIUS = 10;
 	private static BufferedImage deadTexture;
+	private static final long bloodVisibilityTime = 4000;
 	public static final float SIZE_RAD = 7f / 4 * RADIUS;
+
 	static {
 		// ANGLES init
 		ANGLES = new float[8];
@@ -48,14 +50,16 @@ public class Robot extends Entity implements ScaleChangeListener {
 	private float viewArcRadius = RADIUS * 5, view_arc = (float) Math.PI / 2;
 	private boolean isDead = false;
 	private Image deadTextureS;
+	private float textureAlpha = 0f;
+	private long dieMillis;
 	// ++++++++++++++++++
 
-    public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
-        float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
-        float y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
-        float dir = (float) (Math.random() * (2 * Math.PI));
-        return new Robot(x, y, dir, gm);
-    }
+	public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
+		float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
+		float y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
+		float dir = (float) (Math.random() * (2 * Math.PI));
+		return new Robot(x, y, dir, gm);
+	}
 
 	public Robot(float x, float y, float dir, GameManager gm) {
 		// TODO body color
@@ -69,6 +73,7 @@ public class Robot extends Entity implements ScaleChangeListener {
 
 	@Override
 	public synchronized void draw(Graphics g, float scale) {
+		g.setColor(Color.BLACK);
 		if (!isDead) {
 			// Blöcke links und rechts
 			// TODO color
@@ -95,41 +100,58 @@ public class Robot extends Entity implements ScaleChangeListener {
 			g.setColor(Color.BLUE);
 			g.fillOval(Math.round((x - RADIUS) * scale), Math.round((y - RADIUS) * scale), Math.round(RADIUS * 2 * scale), Math.round(RADIUS * 2 * scale));
 		} else {
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, textureAlpha));
 			g.drawImage(deadTextureS, tfm(x, scale) - deadTextureS.getWidth(null) / 2, tfm(y, scale) - deadTextureS.getHeight(null) / 2, null);
+			((Graphics2D) g).setComposite(AlphaComposite.Clear);
 		}
 	}
 
 
-    @Override
-    public void setDir(float dir) {
-        super.setDir(dir);
-        calcAngles();
-    }
+	@Override
+	public void setDir(float dir) {
+		super.setDir(dir);
+		calcAngles();
+	}
 
-    @Override
-    public void changeDir(float change) {
-        super.changeDir(change);
-        calcAngles();
-    }
+	@Override
+	public void changeDir(float change) {
+		super.changeDir(change);
+		calcAngles();
+	}
 
-    private void calcAngles() {
-        // Werte für Boxen an den Seiten an Winkel anpassen
-        for (int i = 0; i < ANGLES.length; i++) {
-            float actangle = dir + ANGLES[i];
-            actangle %= 2 * Math.PI;
-            angleSins[i] = (float) Math.sin(actangle);
-            angleCosins[i] = (float) Math.cos(actangle);
-        }
-    }
+	private void calcAngles() {
+		// Werte für Boxen an den Seiten an Winkel anpassen
+		for (int i = 0; i < ANGLES.length; i++) {
+			float actangle = dir + ANGLES[i];
+			actangle %= 2 * Math.PI;
+			angleSins[i] = (float) Math.sin(actangle);
+			angleCosins[i] = (float) Math.cos(actangle);
+		}
+	}
 
 	public void die() {
-		isDead = true;
+		if (!isDead) {
+			isDead = true;
+			dieMillis = System.currentTimeMillis();
+		}
 	}
 
 	@Override
 	public void onScaleChange(float scale) {
 		if (deadTexture != null) {
 			deadTextureS = deadTexture.getScaledInstance(Math.round(RADIUS * 8 * scale), -1, Image.SCALE_FAST);
+		}
+	}
+
+	@Override
+	public void tick() {
+		if (isDead) {
+			textureAlpha = 1 - ((System.currentTimeMillis() - dieMillis) / (float) bloodVisibilityTime);
+			System.out.println("textureAlpha = " + textureAlpha);
+			if (textureAlpha <= 0f) {
+				textureAlpha = 0f;
+				gm.remove(this);
+			}
 		}
 	}
 }
