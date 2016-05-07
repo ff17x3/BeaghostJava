@@ -6,8 +6,8 @@ import java.awt.*;
  * Created by Ma on 06.05.2016
  */
 public class KIRobot1 extends Robot implements Entity.Tickable {
-	public static final int LOOK_AROUND = 0, WALK_TO_TARGET = 1, SLEEP = 2, ROTATE_TO_TARGET = 3;
-	public static final long MIN_LOOK_AROUND_DURATION = (long) 2e9, MAX_LOOK_AROUND_DURATION = (long) 4e9;
+	public static final int LOOK_AROUND = 0, SLEEP = 1, ROTATE_TO_TARGET = 2, WALK_TO_TARGET = 3;
+	//	public static final long MIN_LOOK_AROUND_DURATION = (long) 2e9, MAX_LOOK_AROUND_DURATION = (long) 4e9;
 	public static final long MIN_SLEEP_DURATION = (long) 3e9, MAX_SLEEP_DURATION = (long) 5e9;
 	// RPS = radians per second; GUPS = game units per second
 	public static final int MIN_ROTATION_RPS = (int) (Math.PI / 3f), MAX_ROTATION_RPS = (int) (Math.PI);
