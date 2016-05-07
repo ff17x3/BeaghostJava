@@ -106,7 +106,6 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public synchronized void draw(Graphics g, float scale) {
 		super.draw(g, scale);
 		if (isSeeing) {
-			System.out.println("attention = " + attention);
 			((Graphics2D) g).setStroke(dashedStroke);
 			g.drawLine(tfm(x), tfm(y), tfm(gm.getPlayer().x), tfm(gm.getPlayer().y));
 			((Graphics2D) g).setStroke(noStroke);
