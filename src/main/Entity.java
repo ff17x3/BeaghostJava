@@ -12,7 +12,7 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	protected float boundingRadius;
 
 	public interface Tickable {
-		void tick();
+		void tick(long nanosDelta);
 	}
 
 	protected float x, y, dir;
