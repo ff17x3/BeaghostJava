@@ -36,6 +36,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 	@Override
 	public void tick(long nanos) {
+		nanos *= 1e6; // TODO nanos sind millis!!!!
 		super.tick(nanos);
 		if (state != SLEEP && sees(gm.getPlayer())) {
 			isSeeing = true;
@@ -69,7 +70,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 				break;
 			case LOOK_AROUND:
 				// TODO zwischendrin zufällig warten oder nicht drehen oder Richtung/Geschwindigkeit ändern
-				changeDir((float) (rotationRPS * nanos / 1e9));
+				changeDir(rotationRPS * nanos / 1e9f);
 				if (!stateStillRunning())
 					nextRandomState();
 				break;
@@ -85,18 +86,14 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		switch (state) {
 			case LOOK_AROUND:
 				enableLookaround();
-				System.out.println("enabled lookaround");
 				break;
 			case SLEEP:
 				enableSleep();
-				System.out.println("enabled sleep");
 				break;
 			case ROTATE_TO_TARGET:
 				enableRotateToTarget();
-				System.out.println("enabled rotatetotarget");
 				break;
 		}
-		System.out.println("new state set: " + state);
 	}
 
 	private void setLineToAtLvl() {
