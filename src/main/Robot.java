@@ -89,7 +89,7 @@ public abstract class Robot extends Entity implements Entity.Tickable {
 			g.fillPolygon(poly);
 			// view sector
 			g.setColor(new Color(255, 255, 0, 100));
-			((Graphics2D) g).fill(new Arc2D.Float((x - viewArcRadius) * scale, (y - viewArcRadius) * scale, 2 * viewArcRadius * scale, 2 * viewArcRadius * scale, -(float) Math.toDegrees((dir - FOV / 2)), -(float) Math.toDegrees(FOV), Arc2D.PIE));
+			((Graphics2D) g).fill(new Arc2D.Float((x - viewArcRadius) * scale, (y - viewArcRadius) * scale, 2 * viewArcRadius * scale, 2 * viewArcRadius * scale, -(float) Math.toDegrees((getDir() - FOV / 2)), -(float) Math.toDegrees(FOV), Arc2D.PIE));
 
 			// Körper
 			g.setColor(Color.BLUE);
@@ -117,7 +117,7 @@ public abstract class Robot extends Entity implements Entity.Tickable {
 	private void calcAngles() {
 		// Werte für Boxen an den Seiten an Winkel anpassen
 		for (int i = 0; i < ANGLES.length; i++) {
-			float actangle = dir + ANGLES[i];
+			float actangle = getDir() + ANGLES[i];
 			actangle %= 2 * Math.PI;
 			angleSins[i] = (float) Math.sin(actangle);
 			angleCosins[i] = (float) Math.cos(actangle);

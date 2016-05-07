@@ -203,8 +203,8 @@ public class Player extends Entity implements Entity.Tickable {
 	@Override
 	protected void moveDir(float time) {
 		float dis = (float) (speedGUPS * time / 1e9);
-		float dy = (float) (Math.sin(dir) * dis);
-		float dx = (float) (Math.cos(dir) * dis);
+		float dy = (float) (Math.sin(getDir()) * dis);
+		float dx = (float) (Math.cos(getDir()) * dis);
 
 		float newX = add(x, dx, gm.getMapWidth(), 2 * boundingRadius);
 		float newY = add(y, dy, gm.getMapHeight(), 2 * boundingRadius);
@@ -229,7 +229,7 @@ public class Player extends Entity implements Entity.Tickable {
 	private void calcAngles() {
 		// Werte für Boxen an den Seiten an Winkel anpassen
 		for (int i = 0; i < ANGLES.length; i++) {
-			float actangle = dir + ANGLES[i];
+			float actangle = getDir() + ANGLES[i];
 			actangle %= 2 * Math.PI;
 			angleSins[i] = (float) Math.sin(actangle);
 			angleCosins[i] = (float) Math.cos(actangle);
