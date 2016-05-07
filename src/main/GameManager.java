@@ -36,9 +36,11 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
         this.main = main;
         this.mapSize = mapSize;
 
+
+        player = new Player(200, 200, 0, this);
         //fills the ArrayList robots
         spawnRobots(robotCount);
-        player = new Player(200, 200, 0, this);
+
         System.out.println("spawend " + robotCount + " Robots");
         drawClock = new ClockNano(FPS, millisDelta -> {
             main.getFrame().redraw();
@@ -100,7 +102,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
             if (Math.sqrt(Math.pow((r.getX() - x), 2) + Math.pow((r.getY() - y), 2)) <= 2 * size)
                 return false;
         }
-        return true;
+        return Math.sqrt(Math.pow((player.getX() - x), 2) + Math.pow((player.getY() - y), 2)) >= player.getSpawnPrtRadius();
     }
 
     private void spawnRobots() {
