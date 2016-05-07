@@ -52,12 +52,7 @@ public class Robot extends Entity implements Entity.Tickable {
 	private float textureAlpha = 0f;
 	private long dieMillis;
 
-	public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
-		float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
-		float y = (float) (Math.random() * (mapHeight - 2 * RADIUS) + RADIUS);
-		float dir = (float) (Math.random() * (2 * Math.PI));
-		return new Robot(x, y, dir, gm);
-	}
+
 
 	public Robot(float x, float y, float dir, GameManager gm) {
 		// TODO body color

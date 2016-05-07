@@ -13,6 +13,7 @@ public class Player extends Entity implements Entity.Tickable {
 	// movement
 	private float speed_ps = 100;
 	private float spawnPrtRadius = 100f;
+	private long weaponCooldown = (long) 3e9;
 
 	// keys
 	private long[] keyUpTimestamp, keyDownTimestamp;
@@ -28,8 +29,9 @@ public class Player extends Entity implements Entity.Tickable {
 	private float[] angleSins, angleCosins;
 	private Polygon poly;
 	private final long weaponShowTime = (long) (0.3 * 1e9);
-	private long weaponShowStartTime;
 	private boolean isPunching;
+	private boolean isCooldownRunning;
+	private long weaponShowStartTime;
 
 	// hardcode CONSTANTS
 	private static final float[] ANGLES;
@@ -81,10 +83,19 @@ public class Player extends Entity implements Entity.Tickable {
 
 //		g.setColor(Color.RED);
 //		drawCross(g, new Point(tfm(x), tfm(y)), 3);
-		if (isPunching) {
-			if ((System.nanoTime() - weaponShowStartTime) > weaponShowTime) {
-				isPunching = false;
+
+		if (isCooldownRunning) {
+			long time = System.nanoTime();
+			float fakt = 1 - (1f * time - weaponShowStartTime) / weaponCooldown;
+			if (fakt <= 0) {
+				fakt = 0;
+				isCooldownRunning = false;
 			} else {
+				if (isPunching) {
+					if ((time - weaponShowStartTime) > weaponShowTime) {
+						isPunching = false;
+					}
+				}
 				Graphics2D g2d = ((Graphics2D) g);
 				g2d.setStroke(new BasicStroke(RADIUS / 6));
 				g2d.drawLine(tfm(angleCosins[5] * distB + x),
@@ -220,9 +231,18 @@ public class Player extends Entity implements Entity.Tickable {
 		}
 	}
 
-	public void punchStart() {
-		weaponShowStartTime = System.nanoTime();
-		isPunching = true;
+	/**
+	 * @return if move is legit
+	 */
+	public boolean punchStart() {
+		long time = System.nanoTime();
+		if (time - weaponShowStartTime >= weaponCooldown) {
+			weaponShowStartTime = time;
+			isPunching = true;
+			isCooldownRunning = true;
+			return true;
+		}
+		return false;
 	}
 
 	public float getSpawnPrtRadius() {
