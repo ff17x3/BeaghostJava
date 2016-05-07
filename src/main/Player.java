@@ -93,16 +93,16 @@ public class Player extends Entity implements Entity.Tickable {
 				g2d.setStroke(new BasicStroke(RADIUS / 6));
 				g2d.drawLine(tfm(angleCosins[5] * distB + x),
 						tfm(angleSins[5] * distB + y),
-						tfm(angleCosins[6] * distC + x),
-						tfm(angleSins[6] * distC + y));
+						tfm(angleCosins[6] * distC * fakt + x),
+						tfm(angleSins[6] * distC * fakt + y));
 
 				g2d.drawLine(tfm(angleCosins[4] * distB + x),
 						tfm(angleSins[4] * distB + y),
-						tfm(angleCosins[6] * distC + x),
-						tfm(angleSins[6] * distC + y));
+						tfm(angleCosins[6] * distC * fakt + x),
+						tfm(angleSins[6] * distC * fakt + y));
 
-				g2d.fillOval(tfm(angleCosins[6] * distC + x - RADIUS / 2),
-						tfm(angleSins[6] * distC + y - RADIUS / 2),
+				g2d.fillOval(tfm(angleCosins[6] * distC * fakt + x - RADIUS / 2),
+						tfm(angleSins[6] * distC * fakt + y - RADIUS / 2),
 						tfm(RADIUS),
 						tfm(RADIUS));
 				g2d.setStroke(new BasicStroke(1f));
