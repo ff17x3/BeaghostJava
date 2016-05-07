@@ -93,7 +93,7 @@ public class Robot extends Entity implements ScaleChangeListener, Entity.Tickabl
 			poly.addPoint(Math.round((angleCosins[7] * distA + x) * scale), Math.round((angleSins[7] * distA + y) * scale));
 			g.fillPolygon(poly);
 			// view sector
-			g.setColor(new Color(255, 255, 0, 200));
+			g.setColor(new Color(255, 255, 0, 100));
 			((Graphics2D) g).fill(new Arc2D.Float((x - viewArcRadius) * scale, (y - viewArcRadius) * scale, 2 * viewArcRadius * scale, 2 * viewArcRadius * scale, -(float) Math.toDegrees((dir - view_arc / 2)), -(float) Math.toDegrees(view_arc), Arc2D.PIE));
 
 			// Körper
@@ -147,7 +147,6 @@ public class Robot extends Entity implements ScaleChangeListener, Entity.Tickabl
 	public void tick() {
 		if (isDead) {
 			textureAlpha = 1 - ((System.currentTimeMillis() - dieMillis) / (float) bloodVisibilityTime);
-			System.out.println("textureAlpha = " + textureAlpha);
 			if (textureAlpha <= 0f) {
 				textureAlpha = 0f;
 				gm.remove(this);
