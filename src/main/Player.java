@@ -26,7 +26,7 @@ public class Player extends Entity implements Entity.Tickable {
 
 	// drawing#####################
 	private float lastScale;
-	private final float radius, distA, distB;
+	private final float radius, distA, distB, distC;
 	private float[] angleSins, angleCosins;
 	private Polygon poly;
 	private final long weaponShowTime = (long) (0.3 * 1e9);
@@ -37,7 +37,7 @@ public class Player extends Entity implements Entity.Tickable {
 
 	static {
 		float a = (float) Math.atan(1 / 3d);
-		ANGLES = new float[6];
+		ANGLES = new float[7];
 		ANGLES[0] = (float) Math.PI / 2 + a;
 		ANGLES[1] = 3 * (float) Math.PI / 2 - a;
 		ANGLES[2] = 3 * (float) Math.PI / 2 + a;
@@ -45,6 +45,8 @@ public class Player extends Entity implements Entity.Tickable {
 
 		ANGLES[4] = (float) Math.PI / 2;
 		ANGLES[5] = 3 * (float) Math.PI / 2;
+
+		ANGLES[6] = (float) Math.PI * 1.5f;
 	}
 
 
@@ -53,11 +55,14 @@ public class Player extends Entity implements Entity.Tickable {
 	public Player(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
 		radius = 10; // hardcode
-		angleSins = new float[6];
-		angleCosins = new float[6];
+		angleSins = new float[ANGLES.length];
+		angleCosins = new float[ANGLES.length];
 		poly = new Polygon();
+
 		distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
 		distB = radius * 1.5f;
+		distC = distB * (float) Math.sqrt(2);
+
 		calcAngles();
 	}
 
@@ -81,11 +86,20 @@ public class Player extends Entity implements Entity.Tickable {
 
 //		g.setColor(Color.RED);
 //		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
-		if(isPunching){
-			if((System.nanoTime()-weaponShowStartTime)>weaponShowTime){
+		if (isPunching) {
+			if ((System.nanoTime() - weaponShowStartTime) > weaponShowTime) {
 				isPunching = false;
-			}else{
-				//TODO draw weapon
+			} else {
+				Graphics2D g2d = ((Graphics2D) g);
+				g2d.setStroke(new BasicStroke(radius / 6));
+				g2d.drawLine(tfm(angleCosins[4]/* todo vllt 5*/ * distB + x, scale),
+						tfm(angleSins[4] * distB + x, scale),
+						tfm(angleCosins[6] * distC + x, scale),
+						tfm(angleSins[6] * distC + y, scale));
+				g2d.fillOval(tfm(angleCosins[6] * distC + x - radius / 4, scale),
+						tfm(angleSins[6] * distC + y - radius / 4, scale),
+						tfm(radius / 2, scale),
+						tfm(radius / 2, scale));
 			}
 		}
 	}

@@ -37,7 +37,6 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		this.main = main;
 		this.mapSize = mapSize;
 
-
         player = new Player(200, 200, 0, this);
         //fills the ArrayList robots
         spawnRobots(robotCount);
@@ -58,8 +57,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		tickClock = new ClockNano(FPS, millisDelta -> mainTick(FPS, millisDelta));
 	}
 
-	private void mainTick(int fps, int millisDelta) {
-		for (Robot r : robots) {
+    private synchronized void mainTick(int fps, int millisDelta) {
+        for (Robot r : robots) {
 			if (r instanceof Entity.Tickable)
 				r.tick();
 		}
@@ -111,13 +110,9 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
         return Math.sqrt(Math.pow((player.getX() - x), 2) + Math.pow((player.getY() - y), 2)) >= player.getSpawnPrtRadius();
     }
 
-	private void spawnRobots() {
-
-	}
-
 	@Override
-	public void draw(Graphics g1, float s) {
-		Graphics2D g = (Graphics2D) g1;
+    public synchronized void draw(Graphics g1, float s) {
+        Graphics2D g = (Graphics2D) g1;
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, tfm(mapSize.getWidth(), s), tfm(mapSize.getHeight(), s));
@@ -182,7 +177,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 
     }
 
-    public void remove(Entity e) {
+    public synchronized void remove(Entity e) {
         if (e instanceof Robot) {
             toRemove.add(((Robot) e));
         }
