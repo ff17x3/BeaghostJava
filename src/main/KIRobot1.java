@@ -19,6 +19,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 	public KIRobot1(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
+		nextRandomState();
 	}
 
 	@Override
@@ -33,9 +34,37 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					nextRandomState();
 				break;
 			case ROTATE_TO_TARGET:
-
+				dir += rotationRPS;
+				float angleToTarget = (float) Math.atan2(destY - y, destX - x);
+				if (Math.abs(dir - angleToTarget) < 0.01) {
+					dir = angleToTarget;
+					enableWalk();
+				}
 				break;
 			case LOOK_AROUND:
+				// TODO zwischendrin zufällig warten oder nicht drehen oder Richtung/Geschwindigkeit ändern
+				dir += rotationRPS;
+				if (!stateStillRunning())
+					nextRandomState();
+				break;
+			case SLEEP:
+				if (!stateStillRunning())
+					nextRandomState();
+				break;
+		}
+	}
+
+	private void nextRandomState() {
+		int state = (int) (Math.random() * 3);
+		switch (state) {
+			case 0:
+				enableRotateToTarget();
+				break;
+			case 1:
+				enableLookaround();
+				break;
+			case 2:
+				enableSleep();
 				break;
 		}
 	}
@@ -45,23 +74,29 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		rotationRPS = 0f;
 		speedGUPS = 0f;
 		state = SLEEP;
+		makeStateTimes();
 	}
 
-	private void nextRandomState() {
-		int state = (int) (Math.random() * 4d);
-		// TODO
-	}
-
+	// OK
 	private void enableRotateToTarget() {
 		destX = (float) Math.random() * gm.getMapWidth();
 		destY = (float) Math.random() * gm.getMapHeight();
 
 		state = ROTATE_TO_TARGET;
 		setDrawViewField(VIEWRAD);
+
+		float angleToTarget = (float) Math.atan2(destY - y, destX - x);
+		float diffRight = Math.abs(angleToTarget - dir), diffLeft = Math.abs(dir - angleToTarget);
+		rotationRPS = (float) (Math.random() * (MAX_ROTATION_RPS - MIN_ROTATION_RPS) + MIN_ROTATION_RPS);
+		if (diffLeft < diffRight) {
+			rotationRPS *= -1;
+		}
 	}
 
+	// OK
 	private void enableWalk() {
 		speedGUPS = (float) (Math.random() * (MAX_SPEED_GUPS - MIN_SPEED_GUPS) + MAX_SPEED_GUPS);
+		rotationRPS = 0f;
 		state = WALK_TO_TARGET;
 	}
 
@@ -70,5 +105,16 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		speedGUPS = 0f;
 		setDrawViewField(VIEWRAD);
 		state = LOOK_AROUND;
+
+		makeStateTimes();
+	}
+
+	private void makeStateTimes() {
+		stateStartNanos = System.nanoTime();
+		stateDurationNanos = (long) (Math.random() * (MAX_SLEEP_DURATION - MIN_SLEEP_DURATION) + MIN_SLEEP_DURATION);
+	}
+
+	private boolean stateStillRunning() {
+		return stateDurationNanos + stateStartNanos > System.nanoTime();
 	}
 }
