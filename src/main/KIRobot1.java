@@ -53,17 +53,18 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		switch (state) {
 			case WALK_TO_TARGET:
 				float distance = Math.abs(x - destX) + Math.abs(y - destY);
-				if (distance > 0.5f)
+				System.out.println("distance = " + distance);
+				if (distance > 0.5f) {
 					moveDir(nanos);
-				else
+				} else {
+					System.out.println("target reached");
 					nextRandomState();
+				}
 				break;
 			case ROTATE_TO_TARGET:
 				float dirchange = rotationRPS * nanos / 1e9f;
 				changeDir(dirchange);
 				float angleToTarget = ((float) Math.atan2(destY - y, destX - x) % (float) Math.PI * 2f);
-				System.out.println("angleToTarget = " + angleToTarget);
-				System.out.println("getDir() = " + getDir());
 				if (Math.abs(getDir() - angleToTarget) < 2 * dirchange) {
 					System.out.println("target found!");
 					setDir(angleToTarget);
@@ -132,7 +133,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		setDrawViewField(VIEWRAD);
 
 		float angleToTarget = (float) Math.atan2(destY - y, destX - x);
-		float diffRight = Math.abs(angleToTarget - getDir()), diffLeft = Math.abs(getDir() - angleToTarget);
+		float diffLeft = Math.abs(angleToTarget - getDir()), diffRight = Math.abs(getDir() - angleToTarget);
 		rotationRPS = (float) (Math.random() * (MAX_ROTATION_RPS - MIN_ROTATION_RPS) + MIN_ROTATION_RPS);
 		if (diffLeft < diffRight) {
 			rotationRPS *= -1;
