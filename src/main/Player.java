@@ -25,7 +25,6 @@ public class Player extends Entity implements Entity.Tickable {
 	private float maxDowntime;
 
 	// drawing#####################
-	private float lastScale;
 	private final float radius, distA, distB, distC;
 	private float[] angleSins, angleCosins;
 	private Polygon poly;
@@ -66,7 +65,6 @@ public class Player extends Entity implements Entity.Tickable {
 
 	@Override
 	public synchronized void draw(Graphics g, float scale) {
-		lastScale = scale;
 		// TODO Colors
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
@@ -169,8 +167,8 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	private void updateDir() {
-		float mouseX = gm.getMouseOnscreenX() / lastScale;
-		float mouseY = gm.getMouseOnscreenY() / lastScale;
+		float mouseX = gm.getMouseOnscreenX() / scale;
+		float mouseY = gm.getMouseOnscreenY() / scale;
 		setDir((float) Math.atan2((mouseY - y), (mouseX - x)));
 	}
 
