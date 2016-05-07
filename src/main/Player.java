@@ -23,8 +23,8 @@ public class Player extends Entity implements Entity.Tickable {
 
 	//ticking
 	private float angleTick;// in welche Richtung bewegt sich der Player in diesem Tick
-	private float angleTickDowntime;
-	private float maxDowntime;
+	private long angleTickDowntime;
+	private long maxDowntime;
 
 	// drawing#####################
 	private float[] angleSins, angleCosins;
@@ -61,7 +61,7 @@ public class Player extends Entity implements Entity.Tickable {
 		super(x, y, dir, gm);
 		angleSins = new float[ANGLES.length];
 		angleCosins = new float[ANGLES.length];
-		boundingRadius = RADIUS ;
+		boundingRadius = RADIUS;
 		FOV = (float) Math.toRadians(60);
 		speedGUPS = 100;
 		poly = new Polygon();
@@ -72,7 +72,6 @@ public class Player extends Entity implements Entity.Tickable {
 	public synchronized void draw(Graphics g, float scale) {
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
-
 
 
 		g.fillOval(tfm(angleCosins[4] * distB + x - RADIUS / 2), tfm(angleSins[4] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));
@@ -201,7 +200,7 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	protected void moveDir(float time) {
+	protected void moveDir(long time) {
 		float dis = (float) (speedGUPS * time / 1e9);
 		float dy = (float) (Math.sin(getDir()) * dis);
 		float dx = (float) (Math.cos(getDir()) * dis);
@@ -217,7 +216,6 @@ public class Player extends Entity implements Entity.Tickable {
 		x = newX;
 		y = newY;
 	}
-
 
 
 	@Override

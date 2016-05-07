@@ -40,7 +40,7 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 		dir %= 2 * Math.PI;
 	}
 
-	protected void moveDir(float time) {
+	protected void moveDir(long time) {
 		float dis = (float) (speedGUPS * time / 1e9);
 		float dy = (float) (Math.sin(dir) * dis);
 		float dx = (float) (Math.cos(dir) * dis);

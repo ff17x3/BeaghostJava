@@ -19,7 +19,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 	private int state;
 	private long stateStartNanos, stateDurationNanos;
-	private float speedGUPS = 0f, rotationRPS = 0f;
+	private float rotationRPS = 0f;
 	private float destX, destY;
 	private float attention = 0f;
 
@@ -56,7 +56,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		switch (state) {
 			case WALK_TO_TARGET:
 				float distance = Math.abs(x - destX) + Math.abs(y - destY);
-				System.out.println("distance = " + distance);
+//				System.out.println("distance = " + distance);
 				if (distance > 0.5f) {
 					moveDir(nanos);
 				} else {
@@ -66,9 +66,11 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 				break;
 			case ROTATE_TO_TARGET:
 				float dirchange = rotationRPS * nanos / 1e9f;
+				float oldDir = getDir();
 				changeDir(dirchange);
-				float angleToTarget = ((float) Math.atan2(destY - y, destX - x) % (float) Math.PI * 2f);
-				if (Math.abs(getDir() - angleToTarget) < 2 * dirchange) {
+				float angleToTarget = ((float) (Math.atan2(destY - y, destX - x) + 2 * Math.PI) % (float) Math.PI * 2f);
+//				if (Math.abs(getDir() - angleToTarget) < 2 * dirchange) {
+				if (Math.signum(oldDir - angleToTarget) != Math.signum(getDir() - angleToTarget)) {
 					System.out.println("target found!");
 					setDir(angleToTarget);
 					enableWalk();
@@ -90,13 +92,15 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	private void nextRandomState() {
 		int state = (int) (Math.random() * 3d);
 		switch (state) {
-			case LOOK_AROUND:
-				enableLookaround();
-				break;
-			case SLEEP:
-				enableSleep();
-				break;
-			case ROTATE_TO_TARGET:
+//			case LOOK_AROUND:
+//				enableLookaround();
+//				break;
+//			case SLEEP:
+//				enableSleep();
+//				break;
+			default:
+//				ROTATE_TO_TARGET:
+//TODO
 				enableRotateToTarget();
 				break;
 		}
@@ -132,6 +136,8 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		destX = (float) Math.random() * (gm.getMapWidth() - 2 * boundingRadius) + boundingRadius;
 		destY = (float) Math.random() * (gm.getMapHeight() - 2 * boundingRadius) + boundingRadius;
 
+		System.out.print("destX = " + destX);
+		System.out.println(", destY = " + destY);
 		state = ROTATE_TO_TARGET;
 		setDrawViewField(VIEWRAD);
 
@@ -149,7 +155,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		speedGUPS = (float) (Math.random() * (MAX_SPEED_GUPS - MIN_SPEED_GUPS) + MAX_SPEED_GUPS);
 		rotationRPS = 0f;
 		state = WALK_TO_TARGET;
-		System.out.println("enabled walk!");
+		System.out.println("enabled walk! speed: " + speedGUPS);
 	}
 
 	private void enableLookaround() {
