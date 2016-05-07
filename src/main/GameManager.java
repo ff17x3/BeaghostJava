@@ -16,7 +16,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 
     // params:
     public static final int FPS = 60;
-    public static final int robotCount = 100;
+    public static final int robotCount = 10;
 
 
     //vars

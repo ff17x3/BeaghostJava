@@ -16,7 +16,7 @@ public class Player extends Entity implements Entity.Tickable {
     // keys
     private long[] keyUpTimestamp, keyDownTimestamp;
     private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
-    private int controlMode = CM_MOUSE;
+    private int controlMode = CM_KEYS;
 
     //ticking
     private float angleTick;// in welche Richtung bewegt sich der Player in diesem Tick
