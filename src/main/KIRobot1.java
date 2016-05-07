@@ -26,6 +26,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	private float dash[] = {10f, 20f};
 	private float lineThickness = 2f;
 	private BasicStroke dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
+	private boolean isSeeing;
 
 
 	public KIRobot1(float x, float y, float dir, GameManager gm) {
@@ -37,7 +38,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public void tick(long nanos) {
 		super.tick(nanos);
 		if (state != SLEEP && sees(gm.getPlayer())) {
-
+			isSeeing = true;
 			if (attention < MAX_ATTENTION) {
 				attention += 0.1f;
 				if (attention > MAX_ATTENTION)
@@ -46,6 +47,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 			}
 
 		} else if (attention > 0) {
+			isSeeing = false;
 			attention = add(attention, -0.005f, Float.MAX_VALUE, 0);
 			setLineToAtLvl();
 		}
@@ -102,9 +104,11 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	@Override
 	public synchronized void draw(Graphics g, float scale) {
 		super.draw(g, scale);
-		((Graphics2D) g).setStroke(dashedStroke);
-		g.drawLine(tfm(x), tfm(y), tfm(gm.getPlayer().x), tfm(gm.getPlayer().y));
-		((Graphics2D) g).setStroke(noStroke);
+		if (isSeeing) {
+			((Graphics2D) g).setStroke(dashedStroke);
+			g.drawLine(tfm(x), tfm(y), tfm(gm.getPlayer().x), tfm(gm.getPlayer().y));
+			((Graphics2D) g).setStroke(noStroke);
+		}
 	}
 
 	private void enableSleep() {
