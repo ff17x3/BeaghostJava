@@ -83,14 +83,17 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	private void nextRandomState() {
 		int state = (int) (Math.random() * 3);
 		switch (state) {
-			case 0:
-				enableRotateToTarget();
-				break;
-			case 1:
+			case LOOK_AROUND:
 				enableLookaround();
+				System.out.println("enabled lookaround");
 				break;
-			case 2:
+			case SLEEP:
 				enableSleep();
+				System.out.println("enabled sleep");
+				break;
+			case ROTATE_TO_TARGET:
+				enableRotateToTarget();
+				System.out.println("enabled rotatetotarget");
 				break;
 		}
 		System.out.println("new state set: " + state);
@@ -134,6 +137,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		if (diffLeft < diffRight) {
 			rotationRPS *= -1;
 		}
+		System.out.println("rotate to target enabled, rotationRPS = " + rotationRPS);
 	}
 
 	// OK
@@ -149,12 +153,14 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		setDrawViewField(VIEWRAD);
 		state = LOOK_AROUND;
 
+		System.out.println("lookaround enabled");
 		makeStateTimes();
 	}
 
 	private void makeStateTimes() {
 		stateStartNanos = System.nanoTime();
 		stateDurationNanos = (long) (Math.random() * (MAX_SLEEP_DURATION - MIN_SLEEP_DURATION) + MIN_SLEEP_DURATION);
+		System.out.println("stateDurationNanos = " + stateDurationNanos / 1e9);
 	}
 
 	private boolean stateStillRunning() {
