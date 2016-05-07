@@ -45,7 +45,7 @@ public class Player extends Entity implements Entity.Tickable {
 		ANGLES[4] = (float) Math.PI / 2;
 		ANGLES[5] = 3 * (float) Math.PI / 2;
 
-		ANGLES[6] = (float) Math.PI * 1.5f;
+		ANGLES[6] = 0f;
 	}
 	// ########################
 
@@ -58,7 +58,7 @@ public class Player extends Entity implements Entity.Tickable {
 
 		distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
 		distB = radius * 1.5f;
-		distC = distB * (float) Math.sqrt(2);
+		distC = (float) Math.sqrt(Math.pow(scale * 1.5f, 2) + Math.pow(GameManager.playerPunchRange - radius, 2));
 
 		calcAngles();
 	}
@@ -88,8 +88,8 @@ public class Player extends Entity implements Entity.Tickable {
 			} else {
 				Graphics2D g2d = ((Graphics2D) g);
 				g2d.setStroke(new BasicStroke(radius / 6));
-				g2d.drawLine(tfm(angleCosins[4]/* todo vllt 5*/ * distB + x),
-						tfm(angleSins[4] * distB + y),
+				g2d.drawLine(tfm(angleCosins[5] * distB + x),
+						tfm(angleSins[5] * distB + y),
 						tfm(angleCosins[6] * distC + x),
 						tfm(angleSins[6] * distC + y));
 				g2d.fillOval(tfm(angleCosins[6] * distC + x - radius / 2),
