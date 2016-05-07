@@ -23,7 +23,8 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 	@Override
 	public void tick(long nanos) {
-		super.tick();
+		super.tick(nanos);
+
 		switch (state) {
 			case WALK_TO_TARGET:
 				float distance = Math.abs(x - destX) + Math.abs(y - destY);
@@ -64,7 +65,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	}
 
 	private void enableLookaround() {
-		rotationRPS = Math.random() > 0 ? -1 : 1 * (float) (Math.random() * (MAX_ROTATION_RPS - MIN_ROTATION_RPS) + MIN_ROTATION_RPS);
+		rotationRPS = Math.random() > 0.5f ? -1 : 1 * (float) (Math.random() * (MAX_ROTATION_RPS - MIN_ROTATION_RPS) + MIN_ROTATION_RPS);
 		speedGUPS = 0f;
 		setDrawViewField(VIEWRAD);
 		state = LOOK_AROUND;

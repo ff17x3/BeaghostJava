@@ -132,7 +132,7 @@ public abstract class Robot extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	public void tick() {
+	public void tick(long nanos) {
 		if (isDead) {
 			textureAlpha = 1 - ((System.currentTimeMillis() - dieMillis) / (float) bloodVisibilityTime);
 			if (textureAlpha <= 0f) {

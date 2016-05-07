@@ -59,7 +59,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		tickClock = new ClockNano(FPS, millisDelta -> mainTick(FPS, millisDelta));
 	}
 
-	private synchronized void mainTick(int fps, int millisDelta) {
+	private synchronized void mainTick(int fps, int nanosDelta) {
 		if (playerIsPunching) {
 			playerIsPunching = false;
 			removeAllRobotsInPlayersReach();
@@ -67,9 +67,9 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 
 		for (Robot r : robots) {
 			if (r instanceof Entity.Tickable)
-				r.tick();
+				r.tick(nanosDelta);
 		}
-		player.tick();
+		player.tick(nanosDelta);
 		for (Robot r : toRemove)
 			robots.remove(r);
 	}
