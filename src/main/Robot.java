@@ -47,7 +47,7 @@ public class Robot extends Entity implements Entity.Tickable {
 	// -----------------------------------------------------------------------
 	private float[] angleSins = new float[8], angleCosins = new float[8];
 	private Polygon poly = new Polygon();
-	protected float viewArcRadius = RADIUS * 7, view_arc = (float) Math.PI / 2;
+	protected float viewArcRadius = RADIUS * 7;
 	private boolean isDead = false;
 	private Image deadTextureS;
 	private float textureAlpha = 0f;
@@ -59,6 +59,7 @@ public class Robot extends Entity implements Entity.Tickable {
 		super(x, y, dir, gm);
 		angleSins = new float[8];
 		angleCosins = new float[8];
+		FOV = (float) Math.PI / 2;
 
 		calcAngles();
 
@@ -88,7 +89,7 @@ public class Robot extends Entity implements Entity.Tickable {
 			g.fillPolygon(poly);
 			// view sector
 			g.setColor(new Color(255, 255, 0, 100));
-			((Graphics2D) g).fill(new Arc2D.Float((x - viewArcRadius) * scale, (y - viewArcRadius) * scale, 2 * viewArcRadius * scale, 2 * viewArcRadius * scale, -(float) Math.toDegrees((dir - view_arc / 2)), -(float) Math.toDegrees(view_arc), Arc2D.PIE));
+			((Graphics2D) g).fill(new Arc2D.Float((x - viewArcRadius) * scale, (y - viewArcRadius) * scale, 2 * viewArcRadius * scale, 2 * viewArcRadius * scale, -(float) Math.toDegrees((dir - FOV / 2)), -(float) Math.toDegrees(FOV), Arc2D.PIE));
 
 			// Körper
 			g.setColor(Color.BLUE);

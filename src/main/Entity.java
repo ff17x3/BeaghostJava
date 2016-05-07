@@ -10,6 +10,7 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	protected float scale;
 	protected float speedGUPS;
 	protected float boundingRadius;
+	protected float FOV;
 
 	public interface Tickable {
 		void tick();
@@ -61,6 +62,11 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	@Override
 	public void onScaleChange(float scale) {
 		this.scale = scale;
+	}
+
+	protected boolean sees(Entity e) {
+		float angle = (float) Math.atan2(e.getY() - y, e.getX() - x);
+		return angle >= dir - FOV / 2 && angle <= dir + FOV / 2;
 	}
 
 	public float getDir() {
