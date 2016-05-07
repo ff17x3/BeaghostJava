@@ -21,7 +21,8 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 		void tick(long nanosDelta);
 	}
 
-	protected float x, y, dir;
+	protected float x, y;
+	private float dir;
 
 	protected GameManager gm;
 

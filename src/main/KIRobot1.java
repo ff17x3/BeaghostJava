@@ -58,16 +58,16 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					nextRandomState();
 				break;
 			case ROTATE_TO_TARGET:
-				dir += rotationRPS;
+				changeDir((float) (rotationRPS * nanos / 1e-9));
 				float angleToTarget = (float) Math.atan2(destY - y, destX - x);
-				if (Math.abs(dir - angleToTarget) < 0.01) {
-					dir = angleToTarget;
+				if (Math.abs(getDir() - angleToTarget) < 0.01) {
+					setDir(angleToTarget);
 					enableWalk();
 				}
 				break;
 			case LOOK_AROUND:
 				// TODO zwischendrin zufällig warten oder nicht drehen oder Richtung/Geschwindigkeit ändern
-				dir += rotationRPS;
+				changeDir((float) (rotationRPS * nanos / 1e-9));
 				if (!stateStillRunning())
 					nextRandomState();
 				break;
@@ -91,6 +91,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 				enableSleep();
 				break;
 		}
+		System.out.println("new state set: " + state);
 	}
 
 	private void setLineToAtLvl() {
@@ -124,7 +125,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		setDrawViewField(VIEWRAD);
 
 		float angleToTarget = (float) Math.atan2(destY - y, destX - x);
-		float diffRight = Math.abs(angleToTarget - dir), diffLeft = Math.abs(dir - angleToTarget);
+		float diffRight = Math.abs(angleToTarget - getDir()), diffLeft = Math.abs(getDir() - angleToTarget);
 		rotationRPS = (float) (Math.random() * (MAX_ROTATION_RPS - MIN_ROTATION_RPS) + MIN_ROTATION_RPS);
 		if (diffLeft < diffRight) {
 			rotationRPS *= -1;
