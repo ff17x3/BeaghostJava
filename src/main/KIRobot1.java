@@ -48,7 +48,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 		} else if (attention > 0) {
 			isSeeing = false;
-			attention = add(attention, -0.005f, Float.MAX_VALUE, 0);
+			attention = add(attention, -0.01f, Float.MAX_VALUE, 0);
 			setLineToAtLvl();
 		}
 		switch (state) {
@@ -97,7 +97,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	}
 
 	private void setLineToAtLvl() {
-		lineThickness += 10 * (1 - attention / MAX_ATTENTION);
+		lineThickness = 10 * (attention / MAX_ATTENTION);
 		dash[1] = 20 * (1 - attention / MAX_ATTENTION);
 		dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
 	}
@@ -106,6 +106,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public synchronized void draw(Graphics g, float scale) {
 		super.draw(g, scale);
 		if (isSeeing) {
+			System.out.println("attention = " + attention);
 			((Graphics2D) g).setStroke(dashedStroke);
 			g.drawLine(tfm(x), tfm(y), tfm(gm.getPlayer().x), tfm(gm.getPlayer().y));
 			((Graphics2D) g).setStroke(noStroke);
