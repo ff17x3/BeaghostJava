@@ -29,7 +29,6 @@ public class Player extends Entity implements Entity.Tickable {
 	private float[] angleSins, angleCosins;
 	private Polygon poly;
 	private final long weaponShowTime = (long) (0.3 * 1e9);
-	private boolean isPunching;
 	private boolean isCooldownRunning;
 	private long weaponShowStartTime;
 
@@ -89,14 +88,8 @@ public class Player extends Entity implements Entity.Tickable {
 			long time = System.nanoTime();
 			float fakt = 1 - (1f * time - weaponShowStartTime) / weaponCooldown;
 			if (fakt <= 0) {
-				fakt = 0;
 				isCooldownRunning = false;
 			} else {
-				if (isPunching) {
-					if ((time - weaponShowStartTime) > weaponShowTime) {
-						isPunching = false;
-					}
-				}
 				Graphics2D g2d = ((Graphics2D) g);
 				g2d.setStroke(new BasicStroke(RADIUS / 6));
 				g2d.drawLine(tfm(angleCosins[5] * distB + x),
@@ -233,7 +226,6 @@ public class Player extends Entity implements Entity.Tickable {
 		long time = System.nanoTime();
 		if (time - weaponShowStartTime >= weaponCooldown) {
 			weaponShowStartTime = time;
-			isPunching = true;
 			isCooldownRunning = true;
 			return true;
 		}
