@@ -147,7 +147,6 @@ public class Robot extends Entity implements ScaleChangeListener, Entity.Tickabl
 	public void tick() {
 		if (isDead) {
 			textureAlpha = 1 - ((System.currentTimeMillis() - dieMillis) / (float) bloodVisibilityTime);
-			System.out.println("textureAlpha = " + textureAlpha);
 			if (textureAlpha <= 0f) {
 				textureAlpha = 0f;
 				gm.remove(this);
