@@ -21,4 +21,9 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public void tick() {
 		super.tick();
 	}
+
+
+	private void enableSleep() {
+		setDrawViewField(0f);
+	}
 }

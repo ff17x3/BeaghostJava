@@ -17,6 +17,9 @@ public class Robot extends Entity implements Entity.Tickable {
 	private static BufferedImage deadTexture;
 	private static final long bloodVisibilityTime = 4000;
 	public static final float SIZE_RAD = 7f / 4 * RADIUS;
+	private static final float
+			distA = (float) (Math.sqrt(2) * RADIUS),
+			distB = (float) (Math.sqrt(4.0625) * RADIUS);
 
 	static {
 		// ANGLES init
@@ -41,16 +44,13 @@ public class Robot extends Entity implements Entity.Tickable {
 	}
 
 	// -----------------------------------------------------------------------
-	// Zeichnen: ++++++++
 	private float[] angleSins = new float[8], angleCosins = new float[8];
 	private Polygon poly = new Polygon();
-	private final float distA = (float) (Math.sqrt(2) * RADIUS), distB = (float) (Math.sqrt(4.0625) * RADIUS); // TODO anpassen, wenn sich RADIUS ändert
 	private float viewArcRadius = RADIUS * 5, view_arc = (float) Math.PI / 2;
 	private boolean isDead = false;
 	private Image deadTextureS;
 	private float textureAlpha = 0f;
 	private long dieMillis;
-	// ++++++++++++++++++
 
 	public static Robot spawnRandom(float mapWidth, float mapHeight, GameManager gm) {
 		float x = (float) (Math.random() * (mapWidth - 2 * RADIUS) + RADIUS);
@@ -151,5 +151,9 @@ public class Robot extends Entity implements Entity.Tickable {
 		if (deadTexture != null) {
 			deadTextureS = deadTexture.getScaledInstance(Math.round(RADIUS * 8 * scale), -1, Image.SCALE_FAST);
 		}
+	}
+
+	public void setDrawViewField(float range) {
+		viewArcRadius = range;
 	}
 }

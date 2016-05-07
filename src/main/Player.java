@@ -26,7 +26,6 @@ public class Player extends Entity implements Entity.Tickable {
 	private float maxDowntime;
 
 	// drawing#####################
-	private final float radius, distA, distB, distC;
 	private float[] angleSins, angleCosins;
 	private Polygon poly;
 	private final long weaponShowTime = (long) (0.3 * 1e9);
@@ -34,7 +33,10 @@ public class Player extends Entity implements Entity.Tickable {
 	private boolean isCooldownRunning;
 	private long weaponShowStartTime;
 
+	// hardcode CONSTANTS
 	private static final float[] ANGLES;
+	private static final float RADIUS = 10;
+	private static final float distA, distB, distC;
 
 	static {
 		float a = (float) Math.atan(1 / 3d);
@@ -48,20 +50,18 @@ public class Player extends Entity implements Entity.Tickable {
 		ANGLES[5] = 3 * (float) Math.PI / 2;
 
 		ANGLES[6] = 0f;
+
+		distA = (float) Math.sqrt(Math.pow(RADIUS * 1.5, 2) + Math.pow(RADIUS / 2, 2));
+		distB = RADIUS * 1.5f;
+		distC = (float) Math.sqrt(Math.pow(RADIUS * 1.5f, 2) + Math.pow(GameManager.playerPunchRange - RADIUS, 2));
 	}
 	// ########################
 
 	public Player(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
-		radius = 10; // hardcode
 		angleSins = new float[ANGLES.length];
 		angleCosins = new float[ANGLES.length];
 		poly = new Polygon();
-
-		distA = (float) Math.sqrt(Math.pow(radius * 1.5, 2) + Math.pow(radius / 2, 2));
-		distB = radius * 1.5f;
-		distC = (float) Math.sqrt(Math.pow(scale * 1.5f, 2) + Math.pow(GameManager.playerPunchRange - radius, 2));
-
 		calcAngles();
 	}
 
@@ -70,8 +70,8 @@ public class Player extends Entity implements Entity.Tickable {
 		// TODO Colors
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
-		g.fillOval(tfm(angleCosins[4] * distB + x - radius / 2), tfm(angleSins[4] * distB + y - radius / 2), tfm(radius), tfm(radius));
-		g.fillOval(tfm(angleCosins[5] * distB + x - radius / 2), tfm(angleSins[5] * distB + y - radius / 2), tfm(radius), tfm(radius));
+		g.fillOval(tfm(angleCosins[4] * distB + x - RADIUS / 2), tfm(angleSins[4] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));
+		g.fillOval(tfm(angleCosins[5] * distB + x - RADIUS / 2), tfm(angleSins[5] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));
 		poly.reset();
 		poly.addPoint(tfm(angleCosins[0] * distA + x), tfm(angleSins[0] * distA + y));
 		poly.addPoint(tfm(angleCosins[1] * distA + x), tfm(angleSins[1] * distA + y));
@@ -80,7 +80,7 @@ public class Player extends Entity implements Entity.Tickable {
 		g.fillPolygon(poly);
 		// center circle
 		g.setColor(Color.GRAY);
-		g.fillOval(tfm(x - radius), tfm(y - radius), tfm(2 * radius), tfm(2 * radius));
+		g.fillOval(tfm(x - RADIUS), tfm(y - RADIUS), tfm(2 * RADIUS), tfm(2 * RADIUS));
 
 //		g.setColor(Color.RED);
 //		drawCross(g, new Point(tfm(x), tfm(y)), 3);
@@ -89,15 +89,15 @@ public class Player extends Entity implements Entity.Tickable {
 				isPunching = false;
 			} else {
 				Graphics2D g2d = ((Graphics2D) g);
-				g2d.setStroke(new BasicStroke(radius / 6));
+				g2d.setStroke(new BasicStroke(RADIUS / 6));
 				g2d.drawLine(tfm(angleCosins[5] * distB + x),
 						tfm(angleSins[5] * distB + y),
 						tfm(angleCosins[6] * distC + x),
 						tfm(angleSins[6] * distC + y));
-				g2d.fillOval(tfm(angleCosins[6] * distC + x - radius / 2),
-						tfm(angleSins[6] * distC + y - radius / 2),
-						tfm(radius),
-						tfm(radius));
+				g2d.fillOval(tfm(angleCosins[6] * distC + x - RADIUS / 2),
+						tfm(angleSins[6] * distC + y - RADIUS / 2),
+						tfm(RADIUS),
+						tfm(RADIUS));
 				g2d.setStroke(new BasicStroke(1f));
 			}
 		}
@@ -195,8 +195,8 @@ public class Player extends Entity implements Entity.Tickable {
 		float dy = (float) (Math.sin(dir) * dis);
 		float dx = (float) (Math.cos(dir) * dis);
 
-		x = add(x, dx, gm.getMapWidth(), 2 * radius);
-		y = add(y, dy, gm.getMapHeight(), 2 * radius);
+		x = add(x, dx, gm.getMapWidth(), 2 * RADIUS);
+		y = add(y, dy, gm.getMapHeight(), 2 * RADIUS);
 	}
 
 	private float add(float a, float change, float max, float padding) {
