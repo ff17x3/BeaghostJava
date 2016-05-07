@@ -144,7 +144,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	}
 
 	private void enableLookaround() {
-		rotationRPS = Math.random() > 0.5f ? -1 : 1 * (float) (Math.random() * (MAX_ROTATION_RPS - MIN_ROTATION_RPS) + MIN_ROTATION_RPS);
+		rotationRPS = (Math.random() > 0.5f ? -1 : 1) * (float) (Math.random() * (MAX_ROTATION_RPS - MIN_ROTATION_RPS) + MIN_ROTATION_RPS);
 		speedGUPS = 0f;
 		setDrawViewField(VIEWRAD);
 		state = LOOK_AROUND;
