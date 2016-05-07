@@ -20,6 +20,8 @@ public class Player extends Entity implements Entity.Tickable {
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
 	private int controlMode = CM_MOUSE;
 
+	private float mouseX, mouseY;
+
 	//ticking
 	private float angleTick;// in welche Richtung bewegt sich der Player in diesem Tick
 	private float angleTickDowntime;
@@ -82,32 +84,35 @@ public class Player extends Entity implements Entity.Tickable {
 
 //		g.setColor(Color.RED);
 //		drawCross(g, new Point(tfm(x), tfm(y)), 3);
-
+		g.setColor(Color.DARK_GRAY.darker());
+		float fakt;
 		if (isCooldownRunning) {
 			long time = System.nanoTime();
-			float fakt = 1 - (1f * time - weaponShowStartTime) / weaponCooldown;
+			fakt = 1 - (1f * time - weaponShowStartTime) / weaponCooldown;
 			if (fakt <= 0) {
 				isCooldownRunning = false;
-			} else {
-				Graphics2D g2d = ((Graphics2D) g);
-				g2d.setStroke(new BasicStroke(RADIUS / 6));
-				g2d.drawLine(tfm(angleCosins[5] * distB + x),
-						tfm(angleSins[5] * distB + y),
-						tfm(angleCosins[6] * distC * fakt + x),
-						tfm(angleSins[6] * distC * fakt + y));
-
-				g2d.drawLine(tfm(angleCosins[4] * distB + x),
-						tfm(angleSins[4] * distB + y),
-						tfm(angleCosins[6] * distC * fakt + x),
-						tfm(angleSins[6] * distC * fakt + y));
-
-				g2d.fillOval(tfm(angleCosins[6] * distC * fakt + x - RADIUS / 2),
-						tfm(angleSins[6] * distC * fakt + y - RADIUS / 2),
-						tfm(RADIUS),
-						tfm(RADIUS));
-				g2d.setStroke(new BasicStroke(1f));
 			}
+
+		} else {
+			fakt = 0;
 		}
+		Graphics2D g2d = ((Graphics2D) g);
+		g2d.setStroke(new BasicStroke(RADIUS / 6));
+		g2d.drawLine(tfm(angleCosins[5] * distB + x),
+				tfm(angleSins[5] * distB + y),
+				tfm(angleCosins[6] * distC * fakt + x),
+				tfm(angleSins[6] * distC * fakt + y));
+
+		g2d.drawLine(tfm(angleCosins[4] * distB + x),
+				tfm(angleSins[4] * distB + y),
+				tfm(angleCosins[6] * distC * fakt + x),
+				tfm(angleSins[6] * distC * fakt + y));
+
+		g2d.fillOval(tfm(angleCosins[6] * distC * fakt + x - RADIUS / 2),
+				tfm(angleSins[6] * distC * fakt + y - RADIUS / 2),
+				tfm(RADIUS),
+				tfm(RADIUS));
+		g2d.setStroke(new BasicStroke(1f));
 	}
 
 	@Override
@@ -176,8 +181,8 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	private void updateDir() {
-		float mouseX = gm.getMouseOnscreenX() / scale;
-		float mouseY = gm.getMouseOnscreenY() / scale;
+		mouseX = gm.getMouseOnscreenX() / scale;
+		mouseY = gm.getMouseOnscreenY() / scale;
 		setDir((float) Math.atan2((mouseY - y), (mouseX - x)));
 	}
 
@@ -195,8 +200,16 @@ public class Player extends Entity implements Entity.Tickable {
 		float dy = (float) (Math.sin(dir) * dis);
 		float dx = (float) (Math.cos(dir) * dis);
 
-		x = add(x, dx, gm.getMapWidth(), 2 * RADIUS);
-		y = add(y, dy, gm.getMapHeight(), 2 * RADIUS);
+		float newX = add(x, dx, gm.getMapWidth(), 2 * RADIUS);
+		float newY = add(y, dy, gm.getMapHeight(), 2 * RADIUS);
+
+		if (Math.signum(x - mouseX) != Math.signum(newX - mouseX))
+			newX = mouseX;
+		if (Math.signum(y - mouseY) != Math.signum(newY - mouseY))
+			newY = mouseY;
+
+		x = newX;
+		y = newY;
 	}
 
 	private float add(float a, float change, float max, float padding) {
