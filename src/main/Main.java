@@ -48,13 +48,14 @@ public class Main implements FrameInitInterface {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
-				writeTimestamp(e, keyDownTimestamp);
+				writeTimestamp(e, keyDownTimestamp);//only for wasd
+
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				super.keyReleased(e);
-				writeTimestamp(e, keyUpTimestamp);
+				writeTimestamp(e, keyUpTimestamp);//only for wasd
 			}
 		});
 		dp.addMouseMotionListener(new MouseAdapter() {

@@ -69,10 +69,12 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
             public void run() {
                 for (int i = 1; i < times.length; i++) {
                     float t = (float) ((times[i] - times[i - 1]) * 1e-6);
-                    avg = (avg * avgcount + t) / (avgcount + 1);
-                    avgcount++;
-                    if (t > 1.2 * avg)
-                        System.out.println("FRAMEDROP: " + t + "ms needed (avg: " + avg + ")");
+                    if (t > 0) {//avoiding strange bugs
+                        avg = (avg * avgcount + t) / (avgcount + 1);
+                        avgcount++;
+                        if (t > 1.2 * avg)
+                            System.out.println("FRAMEDROP: " + t + "ms needed (avg: " + avg + ")");
+                    }
 
                 }
 
