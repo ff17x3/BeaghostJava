@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.*;
+
 /**
  * Created by Ma on 06.05.2016
  */
@@ -11,11 +13,19 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public static final int MIN_ROTATION_RPS = (int) (Math.PI / 3f), MAX_ROTATION_RPS = (int) (Math.PI);
 	public static final int MIN_SPEED_GUPS = 20, MAX_SPEED_GUPS = 75;
 	public static final float VIEWRAD = RADIUS * 7;
+	public static final float MAX_ATTENTION = 20f;
 
 	private int state;
 	private long stateStartNanos, stateDurationNanos;
 	private float speedGUPS = 0f, rotationRPS = 0f;
 	private float destX, destY;
+	private float attention = 0f;
+
+
+	//drawing
+	private float dash[] = {10f, 20f};
+	private float lineThickness = 2f;
+	private BasicStroke dashedStroke;
 
 	public KIRobot1(float x, float y, float dir, GameManager gm) {
 		super(x, y, dir, gm);
@@ -24,7 +34,14 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	@Override
 	public void tick(long nanos) {
 		super.tick(nanos);
+		if (state != SLEEP && sees(gm.getPlayer())) {
+			attention += 0.1f;
+			setLineToAtLvl();
 
+		} else if (attention > 0) {
+			attention = add(attention, -0.005f, Float.MAX_VALUE, 0);
+			setLineToAtLvl();
+		}
 		switch (state) {
 			case WALK_TO_TARGET:
 				float distance = Math.abs(x - destX) + Math.abs(y - destY);
@@ -39,6 +56,20 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 			case LOOK_AROUND:
 				break;
 		}
+	}
+
+	private void setLineToAtLvl() {
+		lineThickness += 10 * (1 - attention / MAX_ATTENTION);
+		dash[1] = 20 * (1 - attention / MAX_ATTENTION);
+		dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
+	}
+
+	@Override
+	public synchronized void draw(Graphics g, float scale) {
+		super.draw(g, scale);
+		((Graphics2D) g).setStroke(dashedStroke);
+		g.drawLine(tfm(x), tfm(y), tfm(gm.getPlayer().x), tfm(gm.getPlayer().y));
+		((Graphics2D) g).setStroke(null);
 	}
 
 	private void enableSleep() {

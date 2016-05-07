@@ -72,10 +72,7 @@ public class Player extends Entity implements Entity.Tickable {
 	public synchronized void draw(Graphics g, float scale) {
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
-		float dash1[] = {10f, 0f};
-		BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash1, 0.0f);
-		((Graphics2D) g).setStroke(dashed);
-		g.drawLine(0, 0, 500, 500);
+
 
 
 		g.fillOval(tfm(angleCosins[4] * distB + x - RADIUS / 2), tfm(angleSins[4] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));
@@ -221,14 +218,7 @@ public class Player extends Entity implements Entity.Tickable {
 		y = newY;
 	}
 
-	private float add(float a, float change, float max, float padding) {
-		a += change;
-		if (a + padding > max)
-			a = max - padding;
-		else if (a - padding < 0)
-			a = padding;
-		return a;
-	}
+
 
 	@Override
 	public void setDir(float dir) {

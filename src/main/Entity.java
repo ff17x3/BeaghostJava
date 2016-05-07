@@ -69,6 +69,24 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 		return angle >= dir - FOV / 2 && angle <= dir + FOV / 2;
 	}
 
+	/**
+	 * a ist between padding and max-padding
+	 *
+	 * @param a
+	 * @param change
+	 * @param max
+	 * @param padding
+	 * @return
+	 */
+	protected float add(float a, float change, float max, float padding) {
+		a += change;
+		if (a + padding > max)
+			a = max - padding;
+		else if (a - padding < 0)
+			a = padding;
+		return a;
+	}
+
 	public float getDir() {
 		return dir;
 	}

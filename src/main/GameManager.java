@@ -204,4 +204,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 			toRemove.add(((Robot) e));
 		}
 	}
+
+	public Player getPlayer() {
+		return player;
+	}
 }
