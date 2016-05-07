@@ -62,6 +62,7 @@ public class Player extends Entity implements Entity.Tickable {
 		angleSins = new float[ANGLES.length];
 		angleCosins = new float[ANGLES.length];
 		boundingRadius = RADIUS * 1.5f;
+		FOV = (float) Math.toRadians(60);
 		speedGUPS = 100;
 		poly = new Polygon();
 		calcAngles();
@@ -71,10 +72,10 @@ public class Player extends Entity implements Entity.Tickable {
 	public synchronized void draw(Graphics g, float scale) {
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
-		float dash1[] = {10.0f};
-		BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 2f, dash1, 0.0f);
+		float dash1[] = {10f, 0f};
+		BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash1, 0.0f);
 		((Graphics2D) g).setStroke(dashed);
-		g.drawLine(0, 0, 300, 300);
+		g.drawLine(0, 0, 500, 500);
 
 
 		g.fillOval(tfm(angleCosins[4] * distB + x - RADIUS / 2), tfm(angleSins[4] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));

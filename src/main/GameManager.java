@@ -19,7 +19,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 	public static final int FPS = 60;
 	public static final int robotCount = 10;
 	public static final float playerPunchRange = 50;
-	public static final float playerPunchAngle = (float) Math.toRadians(30);//for each side
+//	public static final float playerPunchAngle = (;//for each side
 
 	//vars
 	private Main main;
@@ -78,18 +78,13 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		float entf;
 		for (Robot r : robots) {
 			if ((entf = entf(r, player)) <= playerPunchRange)
-				if (robotInFOV(r) || entf < r.boundingRadius) {
+				if (player.sees(r) || entf < r.boundingRadius) {
 					r.die();
 					System.out.println("removed robot");
 				}
 		}
 	}
 
-	private boolean robotInFOV(Robot r) {
-//		return true;
-		float angle = (float) Math.atan2(r.getY() - player.getY(), r.getX() - player.getX());
-		return angle >= player.getDir() - playerPunchAngle && angle <= player.getDir() + playerPunchAngle;
-	}
 
 
 	private void printTimes() {
