@@ -8,6 +8,7 @@ import util.ScaleChangeListener;
  */
 public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	protected float scale;
+	protected float speedGUPS;
 
 	public interface Tickable{
 		void tick();
