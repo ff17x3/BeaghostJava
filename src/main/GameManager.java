@@ -86,7 +86,6 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 	}
 
 
-
 	private void printTimes() {
 		new Thread() {
 			public void run() {
@@ -117,9 +116,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 				y = (float) (Math.random() * (mapHeight - 2 * size) + size);
 			} while (!isFree(x, y, size));
 			dir = (float) (Math.random() * (2 * Math.PI));
-			robots.add(new Robot(x, y, dir, this));
+			robots.add(new KIRobot1(x, y, dir, this));
 		}
-		robots.add(new KIRobot1(100, 100, 0, this));
 	}
 
 	private boolean isFree(float x, float y, float size) {
