@@ -37,12 +37,14 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		this.main = main;
 		this.mapSize = mapSize;
 
-		//fills the ArrayList robots
-		spawnRobots(robotCount);
-		player = new Player(200, 200, 0, this);
-		System.out.println("spawend " + robotCount + " Robots");
-		drawClock = new ClockNano(FPS, millisDelta -> {
-			main.getFrame().redraw();
+
+        player = new Player(200, 200, 0, this);
+        //fills the ArrayList robots
+        spawnRobots(robotCount);
+
+        System.out.println("spawend " + robotCount + " Robots");
+        drawClock = new ClockNano(FPS, millisDelta -> {
+            main.getFrame().redraw();
 
 			if (counter == inteval) {
 				printTimes();
@@ -66,19 +68,23 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 			robots.remove(r);
 	}
 
-	private void printTimes() {
-		new Thread() {
-			public void run() {
-				for (int i = 1; i < times.length; i++) {
-					float t = (float) ((times[i] - times[i - 1]) * 1e-6);
-					avg = (avg * avgcount + t) / (avgcount + 1);
-					avgcount++;
-					if (t > 1.2 * avg)
-						System.out.println("FRAMEDROP: " + t + "ms needed (avg: " + avg + ")");
-				}
-			}
-		}.start();
-	}
+    private void printTimes() {
+        new Thread() {
+            public void run() {
+                for (int i = 1; i < times.length; i++) {
+                    float t = (float) ((times[i] - times[i - 1]) * 1e-6);
+                    if (t > 0) {//avoiding strange bugs
+                        avg = (avg * avgcount + t) / (avgcount + 1);
+                        avgcount++;
+                        if (t > 1.2 * avg)
+                            System.out.println("FRAMEDROP: " + t + "ms needed (avg: " + avg + ")");
+                    }
+
+                }
+
+            }
+        }.start();
+    }
 
 	private void spawnRobots(int robotCount) {
 		float mapWidth = mapSize.getWidth();
@@ -97,13 +103,13 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		robots.add(new KIRobot1(200, 200, 0, this));
 	}
 
-	private boolean isFree(float x, float y, float size) {
-		for (Robot r : robots) {
-			if (Math.sqrt(Math.pow((r.getX() - x), 2) + Math.pow((r.getY() - y), 2)) <= 2 * size)
-				return false;
-		}
-		return true;
-	}
+    private boolean isFree(float x, float y, float size) {
+        for (Robot r : robots) {
+            if (Math.sqrt(Math.pow((r.getX() - x), 2) + Math.pow((r.getY() - y), 2)) <= 2 * size)
+                return false;
+        }
+        return Math.sqrt(Math.pow((player.getX() - x), 2) + Math.pow((player.getY() - y), 2)) >= player.getSpawnPrtRadius();
+    }
 
 	private void spawnRobots() {
 
@@ -165,16 +171,20 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 	}
 
 
-	@Override
-	public void onScaleChange(float scale) {
-		for (Robot r : robots) {
-			r.onScaleChange(scale);
-		}
-	}
+    @Override
+    public void onScaleChange(float scale) {
+        for (Robot r : robots) {
+            r.onScaleChange(scale);
+        }
+    }
 
-	public void remove(Entity e) {
-		if (e instanceof Robot) {
-			toRemove.add(((Robot) e));
-		}
-	}
+    public void playerPunch() {
+
+    }
+
+    public void remove(Entity e) {
+        if (e instanceof Robot) {
+            toRemove.add(((Robot) e));
+        }
+    }
 }

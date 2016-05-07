@@ -48,13 +48,17 @@ public class Main implements FrameInitInterface {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
-				writeTimestamp(e, keyDownTimestamp);
+				if (!writeTimestamp(e, keyDownTimestamp)) {//only for wasd
+					if (e.getKeyChar() == ' ') {
+						gm.playerPunch();
+					}
+				}
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				super.keyReleased(e);
-				writeTimestamp(e, keyUpTimestamp);
+				writeTimestamp(e, keyUpTimestamp);//only for wasd
 			}
 		});
 		dp.addMouseMotionListener(new MouseAdapter() {
@@ -70,6 +74,13 @@ public class Main implements FrameInitInterface {
 				mouseMoved(e);
 			}
 		});
+		dp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				super.mousePressed(e);
+				gm.playerPunch();
+			}
+		});
 		f.setLocation(100, 100);
 	}
 
@@ -78,7 +89,12 @@ public class Main implements FrameInitInterface {
 		mouseOnscreenY = e.getY();
 	}
 
-	private synchronized void writeTimestamp(KeyEvent e, long[] keyTimestamp) {
+	/**
+	 * @param e
+	 * @param keyTimestamp
+	 * @return if press has been handled
+	 */
+	private synchronized boolean writeTimestamp(KeyEvent e, long[] keyTimestamp) {
 		char key = e.getKeyChar();
 		int i = 0;
 		while (i < keys.length && key != keys[i]) {
@@ -86,7 +102,9 @@ public class Main implements FrameInitInterface {
 		}
 		if (i != keys.length) {
 			keyTimestamp[i] = System.nanoTime();
+			return true;
 		}
+		return false;
 	}
 
 	public DrawFrame getFrame() {
