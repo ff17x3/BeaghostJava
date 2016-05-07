@@ -36,7 +36,7 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 
 
 	public void changeDir(float change) {
-		dir += change;
+		dir += change + 2 * Math.PI;
 		dir %= 2 * Math.PI;
 	}
 

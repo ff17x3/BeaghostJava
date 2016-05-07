@@ -56,7 +56,6 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		switch (state) {
 			case WALK_TO_TARGET:
 				float distance = Math.abs(x - destX) + Math.abs(y - destY);
-//				System.out.println("distance = " + distance);
 				if (distance > 0.5f) {
 					moveDir(nanos);
 				} else {
