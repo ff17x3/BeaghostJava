@@ -36,5 +36,11 @@ public abstract class Entity implements DrawInferface {
 		this.dir = dir;
     }
 
+    public float getX() {
+        return x;
+    }
 
+    public float getY() {
+        return y;
+    }
 }

@@ -15,10 +15,9 @@ import java.io.IOException;
 public class Robot extends Entity implements ScaleChangeListener {
 	// statische Winkel für Boxen-----------------------------------------------
 	private static final float[] ANGLES; // Winkel für Ecken von Boxen
-	public static final float RADIUS = 10;
-	private static BufferedImage deadTexture, dea;
-
-	private static final float SIZE = 7 / 4 * RADIUS;
+	private static final float RADIUS = 10;
+	private static BufferedImage deadTexture;
+	public static final float SIZE_RAD = 7f / 4 * RADIUS;
 	static {
 		// ANGLES init
 		ANGLES = new float[8];
