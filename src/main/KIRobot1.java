@@ -48,7 +48,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 		} else if (attention > 0) {
 			isSeeing = false;
-			attention = add(attention, -0.01f, Float.MAX_VALUE, 0);
+			attention = add(attention, -0.02f, Float.MAX_VALUE, 0);
 			setLineToAtLvl();
 		}
 		switch (state) {
@@ -60,7 +60,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					nextRandomState();
 				break;
 			case ROTATE_TO_TARGET:
-				changeDir((float) (rotationRPS * nanos / 1e-9));
+				changeDir((float) (rotationRPS * nanos / 1e9));
 				float angleToTarget = (float) Math.atan2(destY - y, destX - x);
 				if (Math.abs(getDir() - angleToTarget) < 0.01) {
 					setDir(angleToTarget);
@@ -69,7 +69,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 				break;
 			case LOOK_AROUND:
 				// TODO zwischendrin zufällig warten oder nicht drehen oder Richtung/Geschwindigkeit ändern
-				changeDir((float) (rotationRPS * nanos / 1e-9));
+				changeDir((float) (rotationRPS * nanos / 1e9));
 				if (!stateStillRunning())
 					nextRandomState();
 				break;
