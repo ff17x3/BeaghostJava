@@ -30,6 +30,8 @@ public class Player extends Entity implements Entity.Tickable {
 	private float[] angleSins, angleCosins;
 	private Polygon poly;
 	private final long weaponShowTime = (long) (0.3 * 1e9);
+	private long weaponShowStartTime;
+	private boolean isPunching;
 
 	private static final float[] ANGLES;
 
@@ -44,6 +46,8 @@ public class Player extends Entity implements Entity.Tickable {
 		ANGLES[4] = (float) Math.PI / 2;
 		ANGLES[5] = 3 * (float) Math.PI / 2;
 	}
+
+
 	// ########################
 
 	public Player(float x, float y, float dir, GameManager gm) {
@@ -77,6 +81,13 @@ public class Player extends Entity implements Entity.Tickable {
 
 //		g.setColor(Color.RED);
 //		drawCross(g, new Point(tfm(x, scale), tfm(y, scale)), 3);
+		if(isPunching){
+			if((System.nanoTime()-weaponShowStartTime)>weaponShowTime){
+				isPunching = false;
+			}else{
+				//TODO draw weapon
+			}
+		}
 	}
 
 	@Override
@@ -191,6 +202,11 @@ public class Player extends Entity implements Entity.Tickable {
 			angleSins[i] = (float) Math.sin(actangle);
 			angleCosins[i] = (float) Math.cos(actangle);
 		}
+	}
+
+	public void punchStart() {
+		weaponShowStartTime = System.nanoTime();
+		isPunching = true;
 	}
 
 	public float getSpawnPrtRadius() {
