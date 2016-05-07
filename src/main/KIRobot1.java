@@ -45,7 +45,6 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					attention = MAX_ATTENTION;
 				setLineToAtLvl();
 			}
-
 		} else if (attention > 0) {
 			isSeeing = false;
 			attention = add(attention, -0.02f, Float.MAX_VALUE, 0);
@@ -60,9 +59,13 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					nextRandomState();
 				break;
 			case ROTATE_TO_TARGET:
-				changeDir((float) (rotationRPS * nanos / 1e9));
-				float angleToTarget = (float) Math.atan2(destY - y, destX - x);
-				if (Math.abs(getDir() - angleToTarget) < 0.01) {
+				float dirchange = rotationRPS * nanos / 1e9f;
+				changeDir(dirchange);
+				float angleToTarget = ((float) Math.atan2(destY - y, destX - x) % (float) Math.PI * 2f);
+				System.out.println("angleToTarget = " + angleToTarget);
+				System.out.println("getDir() = " + getDir());
+				if (Math.abs(getDir() - angleToTarget) < 2 * dirchange) {
+					System.out.println("target found!");
 					setDir(angleToTarget);
 					enableWalk();
 				}
@@ -81,7 +84,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	}
 
 	private void nextRandomState() {
-		int state = (int) (Math.random() * 3);
+		int state = (int) (Math.random() * 3d);
 		switch (state) {
 			case LOOK_AROUND:
 				enableLookaround();
@@ -117,6 +120,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		speedGUPS = 0f;
 		state = SLEEP;
 		makeStateTimes();
+		System.out.println("enabled sleep");
 	}
 
 	// OK
@@ -141,6 +145,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		speedGUPS = (float) (Math.random() * (MAX_SPEED_GUPS - MIN_SPEED_GUPS) + MAX_SPEED_GUPS);
 		rotationRPS = 0f;
 		state = WALK_TO_TARGET;
+		System.out.println("enabled walk!");
 	}
 
 	private void enableLookaround() {
@@ -156,7 +161,6 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	private void makeStateTimes() {
 		stateStartNanos = System.nanoTime();
 		stateDurationNanos = (long) (Math.random() * (MAX_SLEEP_DURATION - MIN_SLEEP_DURATION) + MIN_SLEEP_DURATION);
-		System.out.println("stateDurationNanos = " + stateDurationNanos / 1e9);
 	}
 
 	private boolean stateStillRunning() {
