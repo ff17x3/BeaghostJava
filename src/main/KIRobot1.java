@@ -36,7 +36,6 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 	@Override
 	public void tick(long nanos) {
-		nanos *= 1e6; // TODO nanos sind millis!!!!
 		super.tick(nanos);
 		if (state != SLEEP && sees(gm.getPlayer())) {
 			isSeeing = true;
