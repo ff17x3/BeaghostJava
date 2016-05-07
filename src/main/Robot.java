@@ -12,8 +12,8 @@ import java.io.IOException;
  */
 public class Robot extends Entity implements Entity.Tickable {
 	// statische Winkel für Boxen-----------------------------------------------
-	private static final float[] ANGLES; // Winkel für Ecken von Boxen
-	private static final float RADIUS = 10;
+	public static final float[] ANGLES; // Winkel für Ecken von Boxen
+	public static final float RADIUS = 10;
 	private static BufferedImage deadTexture;
 	private static final long bloodVisibilityTime = 4000;
 	public static final float SIZE_RAD = 7f / 4 * RADIUS;
@@ -46,7 +46,7 @@ public class Robot extends Entity implements Entity.Tickable {
 	// -----------------------------------------------------------------------
 	private float[] angleSins = new float[8], angleCosins = new float[8];
 	private Polygon poly = new Polygon();
-	private float viewArcRadius = RADIUS * 5, view_arc = (float) Math.PI / 2;
+	protected float viewArcRadius = RADIUS * 7, view_arc = (float) Math.PI / 2;
 	private boolean isDead = false;
 	private Image deadTextureS;
 	private float textureAlpha = 0f;
