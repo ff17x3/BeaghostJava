@@ -173,4 +173,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
             r.onScaleChange(scale);
         }
     }
+
+    public void playerPunch() {
+
+    }
 }
