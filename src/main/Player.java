@@ -12,6 +12,7 @@ public class Player extends Entity implements Entity.Tickable {
 
     // movement
     private float speed_ps = 100;
+    private static float spawnPrtRadius = 100f;
 
     // keys
     private long[] keyUpTimestamp, keyDownTimestamp;
@@ -191,7 +192,10 @@ public class Player extends Entity implements Entity.Tickable {
         }
     }
 
-//	public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
+    public static float getSpawnPrtRadius() {
+        return spawnPrtRadius;
+    }
+    //	public static void drawCross(Graphics g, Point middle, int halfBoxSize) {
 //		g.drawLine(middle.x - halfBoxSize, middle.y - halfBoxSize, middle.x + halfBoxSize, middle.y + halfBoxSize);
 //		g.drawLine(middle.x - halfBoxSize, middle.y + halfBoxSize, middle.x + halfBoxSize, middle.y - halfBoxSize);
 //	}
