@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Max on 05.05.2016
  */
-public class Robot extends Entity implements Entity.Tickable {
+public abstract class Robot extends Entity implements Entity.Tickable {
 	// statische Winkel für Boxen-----------------------------------------------
 	public static final float[] ANGLES; // Winkel für Ecken von Boxen
 	public static final float RADIUS = 10;
