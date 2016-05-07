@@ -124,7 +124,7 @@ public class Player extends Entity implements Entity.Tickable {
 	}
 
 	@Override
-	public synchronized void tick() {
+	public synchronized void tick(long naosDelta) {
 		// move Player when keys pressed
 		keyUpTimestamp = gm.getKeyUpTimestamp();
 		keyDownTimestamp = gm.getKeyDownTimestamp();
