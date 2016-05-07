@@ -65,7 +65,6 @@ public class Player extends Entity implements Entity.Tickable {
 
 	@Override
 	public synchronized void draw(Graphics g, float scale) {
-		// TODO Colors
 		// shoulders
 		g.setColor(Color.DARK_GRAY);
 		g.fillOval(tfm(angleCosins[4] * distB + x - RADIUS / 2), tfm(angleSins[4] * distB + y - RADIUS / 2), tfm(RADIUS), tfm(RADIUS));
@@ -92,6 +91,12 @@ public class Player extends Entity implements Entity.Tickable {
 						tfm(angleSins[5] * distB + y),
 						tfm(angleCosins[6] * distC + x),
 						tfm(angleSins[6] * distC + y));
+
+				g2d.drawLine(tfm(angleCosins[4] * distB + x),
+						tfm(angleSins[4] * distB + y),
+						tfm(angleCosins[6] * distC + x),
+						tfm(angleSins[6] * distC + y));
+
 				g2d.fillOval(tfm(angleCosins[6] * distC + x - RADIUS / 2),
 						tfm(angleSins[6] * distC + y - RADIUS / 2),
 						tfm(RADIUS),
