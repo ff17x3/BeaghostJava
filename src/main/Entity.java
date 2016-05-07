@@ -13,23 +13,23 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 		void tick();
 	}
 
-    protected float x, y, dir;
+	protected float x, y, dir;
 
-    protected GameManager gm;
+	protected GameManager gm;
 
-    public Entity(float x, float y, float dir, GameManager gm) {
-        // colors.. body: 0xff990000 box: 0xff000000
-        this.x = x;
-        this.y = y;
-        this.gm = gm;
-        this.dir = dir;
-    }
+	public Entity(float x, float y, float dir, GameManager gm) {
+		// colors.. body: 0xff990000 box: 0xff000000
+		this.x = x;
+		this.y = y;
+		this.gm = gm;
+		this.dir = dir;
+	}
 
 
 	public void changeDir(float change) {
-        dir += change;
-        dir %= 2 * Math.PI;
-    }
+		dir += change;
+		dir %= 2 * Math.PI;
+	}
 
 	protected int tfm(double v) {
 		return (int) Math.round(scale * v);
@@ -37,11 +37,11 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 
 	public void setDir(float dir) {
 		this.dir = dir;
-    }
+	}
 
-    public float getX() {
-        return x;
-    }
+	public float getX() {
+		return x;
+	}
 
     public float getY() {
         return y;
@@ -50,5 +50,9 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	@Override
 	public void onScaleChange(float scale) {
 		this.scale = scale;
+	}
+
+	public float getDir() {
+		return dir;
 	}
 }
