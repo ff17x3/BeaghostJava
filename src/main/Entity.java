@@ -3,6 +3,8 @@ package main;
 import util.DrawInferface;
 import util.ScaleChangeListener;
 
+import java.awt.*;
+
 /**
  * Created by Florian on 05.05.2016
  */
@@ -11,6 +13,9 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	protected float speedGUPS;
 	protected float boundingRadius;
 	protected float FOV;
+
+	public static final BasicStroke noStroke = new BasicStroke(1f);
+
 
 	public interface Tickable {
 		void tick(long nanosDelta);

@@ -117,7 +117,7 @@ public class Player extends Entity implements Entity.Tickable {
 				tfm(angleSins[6] * distC * fakt + y - RADIUS / 2),
 				tfm(RADIUS),
 				tfm(RADIUS));
-		g2d.setStroke(new BasicStroke(1f));
+		g2d.setStroke(noStroke);
 	}
 
 	@Override

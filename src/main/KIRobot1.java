@@ -98,7 +98,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		super.draw(g, scale);
 		((Graphics2D) g).setStroke(dashedStroke);
 		g.drawLine(tfm(x), tfm(y), tfm(gm.getPlayer().x), tfm(gm.getPlayer().y));
-		((Graphics2D) g).setStroke(null);
+		((Graphics2D) g).setStroke(noStroke);
 	}
 
 	private void enableSleep() {
