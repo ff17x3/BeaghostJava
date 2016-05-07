@@ -79,7 +79,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		for (Robot r : robots) {
 			if (entf(r, player) <= playerPunchRange)
 				if (robotInFOV(r)) {
-					toRemove.add(r);
+					r.die();
 					System.out.println("removed robot");
 				}
 		}
