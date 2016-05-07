@@ -47,7 +47,6 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		System.out.println("spawend " + robotCount + " Robots");
 		drawClock = new ClockNano(FPS, millisDelta -> {
 			main.getFrame().redraw();
-
 			if (counter == inteval) {
 				printTimes();
 //                timeOld = time;
@@ -141,11 +140,9 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, tfm(mapSize.getWidth(), s), tfm(mapSize.getHeight(), s));
-		g.setColor(Color.RED);
 		for (Robot robot : robots) {
 			robot.draw(g, s);
 		}
-		g.setColor(Color.BLUE);
 		player.draw(g, s);
 	}
 
@@ -200,7 +197,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		for (Robot r : robots) {
 			r.onScaleChange(scale);
 		}
-	}
+        player.onScaleChange(scale);
+    }
 
 	public void playerPunch() {
 		player.punchStart();//for drawing

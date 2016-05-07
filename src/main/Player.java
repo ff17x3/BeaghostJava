@@ -48,8 +48,6 @@ public class Player extends Entity implements Entity.Tickable {
 
 		ANGLES[6] = (float) Math.PI * 1.5f;
 	}
-
-
 	// ########################
 
 	public Player(float x, float y, float dir, GameManager gm) {
@@ -100,6 +98,7 @@ public class Player extends Entity implements Entity.Tickable {
 						tfm(angleSins[6] * distC + y - radius / 2),
 						tfm(radius),
 						tfm(radius));
+				g2d.setStroke(new BasicStroke(1f));
 			}
 		}
 	}
