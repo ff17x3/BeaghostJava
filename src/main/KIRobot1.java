@@ -15,7 +15,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public static final float VIEWRAD = RADIUS * 7;
 	public static final float MAX_ATTENTION = 10f;
 
-	private float kIStrength = 0.6f;
+	private float kIStrength = 0.3f;
 
 	private int state;
 	private long stateStartNanos, stateDurationNanos;
@@ -129,8 +129,8 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 	// OK
 	private void enableRotateToTarget() {
-		destX = (float) Math.random() * gm.getMapWidth();
-		destY = (float) Math.random() * gm.getMapHeight();
+		destX = (float) Math.random() * (gm.getMapWidth() - 2 * boundingRadius) + boundingRadius;
+		destY = (float) Math.random() * (gm.getMapHeight() - 2 * boundingRadius) + boundingRadius;
 
 		state = ROTATE_TO_TARGET;
 		setDrawViewField(VIEWRAD);
