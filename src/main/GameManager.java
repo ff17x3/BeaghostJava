@@ -17,8 +17,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 
 	// params:
 	public static final int FPS = 60;
-    public static final int robotCount = 1;
-    public static final float playerPunchRange = 50;
+	public static final int robotCount = 1;
+	public static final float playerPunchRange = 50;
 //	public static final float playerPunchAngle = (;//for each side
 
 	//vars
@@ -56,10 +56,10 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 				counter++;
 			}
 		});
-		tickClock = new ClockNano(FPS, millisDelta -> mainTick(FPS, millisDelta));
+		tickClock = new ClockNano(FPS, nanosDelta -> mainTick(FPS, nanosDelta));
 	}
 
-	private synchronized void mainTick(int fps, int nanosDelta) {
+	private synchronized void mainTick(int fps, long nanosDelta) {
 		if (playerIsPunching) {
 			playerIsPunching = false;
 			removeAllRobotsInPlayersReach();
