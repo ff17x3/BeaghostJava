@@ -48,7 +48,7 @@ public abstract class Robot extends Entity implements Entity.Tickable {
 	private float[] angleSins = new float[8], angleCosins = new float[8];
 	private Polygon poly = new Polygon();
 	protected float viewArcRadius = RADIUS * 7;
-	private boolean isDead = false;
+	protected boolean isDead = false;
 	private Image deadTextureS;
 	private float textureAlpha = 0f;
 	private long dieMillis;

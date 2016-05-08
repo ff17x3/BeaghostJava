@@ -1,0 +1,2 @@
+BUG:
+    - Roboter sehen Spieler manachmal nicht
