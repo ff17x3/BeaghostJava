@@ -70,9 +70,24 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 		this.scale = scale;
 	}
 
-	protected boolean sees(Entity e) {
-		float angle = (float) Math.atan2(e.getY() - y, e.getX() - x);
-		return angle >= dir - FOV / 2 && angle <= dir + FOV / 2;
+	protected boolean sees(Entity e) {//TODO
+		float angle = posAngle((float) ((Math.atan2(e.getY() - y, e.getX() - x))));
+
+		float min = dir - FOV / 2;
+		float max = dir + FOV / 2;
+		if (min < 0) {
+			min += Math.PI * 2;
+		} else if (max > Math.PI * 2) {
+			max -= Math.PI * 2;
+		} else {
+			//"normal case"
+			return angle > min && angle < max;
+		}
+		return (angle > min && angle < Math.PI * 2) || (angle > 0 && angle < max);
+	}
+
+	public static float posAngle(float angle) {
+		return (float) ((angle + 2 * Math.PI) % (2 * Math.PI));
 	}
 
 	/**
@@ -84,7 +99,7 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 	 * @param padding
 	 * @return
 	 */
-	protected float add(float a, float change, float max, float padding) {
+	public static float add(float a, float change, float max, float padding) {
 		a += change;
 		if (a + padding > max)
 			a = max - padding;

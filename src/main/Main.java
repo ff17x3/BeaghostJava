@@ -17,12 +17,14 @@ import java.awt.event.MouseEvent;
  */
 public class Main implements FrameInitInterface {
 	public static void main(String[] args) {
+
+//		System.out.println(Math.atan2(-10, 5));
 		new Main();
 	}
 
 	private DrawFrame frame;
-	private Dimension frameSize = new Dimension(500, 500);
-	private DimensionF mapSize = new DimensionF(500, 500);
+	private Dimension frameSize = new Dimension(800, 800);
+	private DimensionF mapSize = new DimensionF(900, 500);
 	private GameManager gm;
 	private long[] keyDownTimestamp = new long[4];//w,a,s,d
 	private long[] keyUpTimestamp = new long[4];//w,a,s,d

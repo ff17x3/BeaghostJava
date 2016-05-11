@@ -9,6 +9,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import static main.KIRobot1.attention;
+import static main.KIRobot1.setLineToAtLvl;
+
 /**
  * Created by Florian on 05.05.2016
  */
@@ -17,7 +20,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 
 	// params:
 	public static final int FPS = 60;
-	public static final int robotCount = 3;
+	public static final int robotCount = 5;
 	public static final float playerPunchRange = 50;
 //	public static final float playerPunchAngle = (;//for each side
 
@@ -68,6 +71,10 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 		for (Robot r : robots) {
 			if (r instanceof Entity.Tickable)
 				r.tick(nanosDelta);
+		}
+		if (attention > 0) {
+			attention = Entity.add(attention, -0.01f, Float.MAX_VALUE, 0);
+			setLineToAtLvl();
 		}
 		player.tick(nanosDelta);
 		for (Robot r : toRemove)

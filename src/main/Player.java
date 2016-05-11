@@ -17,7 +17,7 @@ public class Player extends Entity implements Entity.Tickable {
 	// keys
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
-	private int controlMode = CM_MOUSE;
+	private int controlMode = CM_KEYS;
 
 	private float mouseX, mouseY;
 
@@ -63,7 +63,7 @@ public class Player extends Entity implements Entity.Tickable {
 		angleCosins = new float[ANGLES.length];
 		boundingRadius = RADIUS;
 		FOV = (float) Math.toRadians(60);
-		speedGUPS = 100;
+		speedGUPS = 1000;
 		poly = new Polygon();
 		calcAngles();
 	}
@@ -187,7 +187,8 @@ public class Player extends Entity implements Entity.Tickable {
 	private void updateDir() {
 		mouseX = gm.getMouseOnscreenX() / scale;
 		mouseY = gm.getMouseOnscreenY() / scale;
-		setDir((float) Math.atan2((mouseY - y), (mouseX - x)));
+		if (!((Math.abs(mouseX - x) <= 2) && (Math.abs(mouseY - y) <= 2)))
+			setDir((float) ((Math.atan2((mouseY - y), (mouseX - x)) + 2 * Math.PI) % (2 * Math.PI)));
 	}
 
 	/**

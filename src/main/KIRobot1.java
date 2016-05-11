@@ -17,20 +17,22 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	public static final float VIEWRAD = RADIUS * 7;
 	public static final float MAX_ATTENTION = 10f;
 
-	private float kIStrength = 0.3f;
+	private float kIStrength = 0.5f;
 
 	private int state;
 	private long stateStartNanos, stateDurationNanos;
 	private float rotationRPS = 0f;
 	private float destX, destY;
-	private static float attention = 0f;
+
 	private float angleToTarget;
 
 
-	//drawing
-	private float dash[] = {10f, 20f};
-	private float lineThickness = 2f;
-	private BasicStroke dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
+	//static:
+	private static float dash[] = {10f, 20f};
+	public static float attention = 0f;
+	private static float lineThickness = 1f;
+	private static BasicStroke dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
+
 	private boolean isSeeing;
 
 
@@ -46,19 +48,21 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 			if (state != SLEEP && sees(gm.getPlayer())) {
 				isSeeing = true;
 				if (attention < MAX_ATTENTION) {
-					attention += kIStrength / 20 * Math.log(1 + GameManager.entf(this, gm.getPlayer()));
-//				System.out.println("attention = " + attention);
+//					attention += kIStrength / (1.5 * Math.log(1 + GameManager.entf(this, gm.getPlayer())));
+					attention += kIStrength / (0.07 * GameManager.entf(this, gm.getPlayer()));
+//					System.out.println("attention = " + attention);
 					if (attention > MAX_ATTENTION) {
 						attention = MAX_ATTENTION;
 						gm.stopTicking();
+
+						System.exit(0);
 						JOptionPane.showMessageDialog(null, "Du wurdest entdeckt!", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
 					}
 					setLineToAtLvl();
 				}
-			} else if (attention > 0) {
+			} else {
 				isSeeing = false;
-				attention = add(attention, -0.02f, Float.MAX_VALUE, 0);
-				setLineToAtLvl();
+
 			}
 			switch (state) {
 				case WALK_TO_TARGET:
@@ -68,7 +72,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					if (Math.signum(oldX - destX) != Math.signum(x - destX) || Math.signum(oldY - destY) != Math.signum(y - destY)) {
 						x = destX;
 						y = destY;
-						System.out.println("target reached");
+//						System.out.println("target reached");
 						nextRandomState();
 					}
 					break;
@@ -79,7 +83,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 
 //				if (Math.abs(getDir() - angleToTarget) < 2 * dirchange) {
 					if (Math.signum(oldDir - angleToTarget) != Math.signum(getDir() - angleToTarget)) {
-						System.out.println("target found!");
+//						System.out.println("target found!");
 						setDir(angleToTarget);
 						enableWalk();
 					}
@@ -113,8 +117,8 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		}
 	}
 
-	private void setLineToAtLvl() {
-		lineThickness = 10 * (attention / MAX_ATTENTION);
+	public static void setLineToAtLvl() {
+		lineThickness = 1 + 10 * (attention / MAX_ATTENTION);
 		dash[1] = 20 * (1 - attention / MAX_ATTENTION);
 		dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
 	}
@@ -138,7 +142,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		speedGUPS = 0f;
 		state = SLEEP;
 		makeStateTimes();
-		System.out.println("enabled sleep");
+//		System.out.println("enabled sleep");
 	}
 
 	// OK
@@ -161,7 +165,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		if (diffRight > Math.PI || diffRight < 0) {
 			rotationRPS *= -1;
 		}
-		System.out.println("rotate to target enabled, rotationRPS = " + rotationRPS);
+//		System.out.println("rotate to target enabled, rotationRPS = " + rotationRPS);
 	}
 
 	// OK
@@ -169,7 +173,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		speedGUPS = (float) (Math.random() * (MAX_SPEED_GUPS - MIN_SPEED_GUPS) + MAX_SPEED_GUPS);
 		rotationRPS = 0f;
 		state = WALK_TO_TARGET;
-		System.out.println("enabled walk! speed: " + speedGUPS);
+//		System.out.println("enabled walk! speed: " + speedGUPS);
 	}
 
 	private void enableLookaround() {
@@ -178,7 +182,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		setDrawViewField(VIEWRAD);
 		state = LOOK_AROUND;
 
-		System.out.println("lookaround enabled");
+//		System.out.println("lookaround enabled");
 		makeStateTimes();
 	}
 
