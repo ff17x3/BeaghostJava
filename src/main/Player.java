@@ -17,7 +17,7 @@ public class Player extends Entity implements Entity.Tickable {
 	// keys
 	private long[] keyUpTimestamp, keyDownTimestamp;
 	private long lastTickTimestamp = System.nanoTime(), tickTimestamp, downtime;
-	private int controlMode = CM_KEYS;
+	private int controlMode = CM_MOUSE;
 
 	private float mouseX, mouseY;
 

@@ -24,7 +24,7 @@ public class Main implements FrameInitInterface {
 
 	private DrawFrame frame;
 	private Dimension frameSize = new Dimension(800, 800);
-	private DimensionF mapSize = new DimensionF(900, 500);
+	private DimensionF mapSize = new DimensionF(500, 500);
 	private GameManager gm;
 	private long[] keyDownTimestamp = new long[4];//w,a,s,d
 	private long[] keyUpTimestamp = new long[4];//w,a,s,d
@@ -83,7 +83,7 @@ public class Main implements FrameInitInterface {
 				gm.playerPunch();
 			}
 		});
-		f.setLocation(100, 100);
+		f.setLocation(800, 100);
 	}
 
 	private synchronized void mouseMove(MouseEvent e) {
