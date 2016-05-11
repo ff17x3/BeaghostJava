@@ -20,7 +20,7 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 
 	// params:
 	public static final int FPS = 60;
-	public static final int robotCount = 5;
+	public static final int robotCount = 3;
 	public static final float playerPunchRange = 50;
 //	public static final float playerPunchAngle = (;//for each side
 

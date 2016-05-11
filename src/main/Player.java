@@ -63,7 +63,7 @@ public class Player extends Entity implements Entity.Tickable {
 		angleCosins = new float[ANGLES.length];
 		boundingRadius = RADIUS;
 		FOV = (float) Math.toRadians(60);
-		speedGUPS = 1000;
+		speedGUPS = 500;
 		poly = new Polygon();
 		calcAngles();
 	}
