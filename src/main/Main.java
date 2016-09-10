@@ -32,7 +32,6 @@ public class Main implements FrameInitInterface {
 
 	public Main() {
 		frame = new DrawFrame(frameSize, this, gm, mapSize);
-		frame.addScaleChangeListener(gm);
 
 		Point mp = MouseInfo.getPointerInfo().getLocation();
 		mouseOnscreenX = mp.x;
@@ -43,6 +42,7 @@ public class Main implements FrameInitInterface {
 
 	public void reset() {
 		gm = new GameManager(this, mapSize);
+		frame.addScaleChangeListener(gm);
 		gm.startTicking();
 	}
 
