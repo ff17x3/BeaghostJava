@@ -38,6 +38,7 @@ public class Main implements FrameInitInterface {
 		mouseOnscreenX = mp.x;
 		mouseOnscreenY = mp.y;
 
+		reset();
 	}
 
 	public void reset() {
