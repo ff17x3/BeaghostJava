@@ -27,9 +27,9 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	private float angleToTarget;
 
 
+
 	//static:
 	private static float dash[] = {10f, 20f};
-	public static float attention = 0f;
 	private static float lineThickness = 1f;
 	private static BasicStroke dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
 
@@ -47,6 +47,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		if (!isDead) {
 			if (state != SLEEP && sees(gm.getPlayer())) {
 				isSeeing = true;
+				float attention = gm.getAttention();
 				if (attention < MAX_ATTENTION) {
 //					attention += kIStrength / (1.5 * Math.log(1 + GameManager.entf(this, gm.getPlayer())));
 					attention += kIStrength / (0.07 * GameManager.entf(this, gm.getPlayer()));
@@ -55,13 +56,13 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 						attention = MAX_ATTENTION;
 						gm.stopTicking();
 						try {
-							Thread.sleep(300);
+							Thread.sleep(500);
 						} catch (InterruptedException ignored) {
 						}
 						gm.reset();
 						JOptionPane.showMessageDialog(null, "Du wurdest entdeckt!", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
 					}
-					setLineToAtLvl();
+					setLineToAtLvl(attention);
 				}
 			} else {
 				isSeeing = false;
@@ -120,7 +121,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		}
 	}
 
-	public static void setLineToAtLvl() {
+	public static void setLineToAtLvl(float attention) {
 		lineThickness = 1 + 10 * (attention / MAX_ATTENTION);
 		dash[1] = 20 * (1 - attention / MAX_ATTENTION);
 		dashedStroke = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0.0f);
