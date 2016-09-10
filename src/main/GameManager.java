@@ -69,7 +69,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 
 		for (Robot r : robots) {
 			if (r instanceof Entity.Tickable)
-				r.tick(nanosDelta);
+				if(r.tick(nanosDelta))
+					return;
 		}
 		if (attention > 0) {
 			attention = Entity.add(attention, -0.01f, Float.MAX_VALUE, 0);

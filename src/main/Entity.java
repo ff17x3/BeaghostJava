@@ -18,7 +18,7 @@ public abstract class Entity implements DrawInferface, ScaleChangeListener {
 
 
 	public interface Tickable {
-		void tick(long nanosDelta);
+		boolean tick(long nanosDelta);
 	}
 
 	protected float x, y;

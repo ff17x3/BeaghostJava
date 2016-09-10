@@ -41,7 +41,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	}
 
 	@Override
-	public void tick(long nanos) {
+	public boolean tick(long nanos) {
 		super.tick(nanos);
 		if (!isDead) {
 			if (state != SLEEP && sees(gm.getPlayer())) {
@@ -54,13 +54,14 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 						gm.setAttention(MAX_ATTENTION);
 						gm.stopTicking();
 						try {
-							Thread.sleep(500);
+							Thread.sleep(5000);
 						} catch (InterruptedException ignored) {
 						}
 						gm.reset();
 						JOptionPane.showMessageDialog(null, "Du wurdest entdeckt!", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
 					}
 					setLineToAtLvl(gm.getAttention());
+					return true;
 				}
 			} else {
 				isSeeing = false;
@@ -102,6 +103,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					break;
 			}
 		}
+		return false;
 	}
 
 	private void nextRandomState() {
