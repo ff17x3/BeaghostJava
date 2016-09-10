@@ -2,6 +2,7 @@ package main;
 
 import util.DimensionF;
 import util.DrawFrame;
+import util.DrawInferface;
 import util.FrameInitInterface;
 
 import javax.swing.*;
@@ -30,7 +31,9 @@ public class Main implements FrameInitInterface {
 	private char[] keys = {'w', 'a', 's', 'd'};
 	private int mouseOnscreenX, mouseOnscreenY;
 
+
 	public Main() {
+
 		frame = new DrawFrame(frameSize, this, gm, mapSize);
 
 		Point mp = MouseInfo.getPointerInfo().getLocation();
@@ -42,6 +45,7 @@ public class Main implements FrameInitInterface {
 
 	public void reset() {
 		gm = new GameManager(this, mapSize);
+		frame.setDrawInferface(gm);
 		frame.addScaleChangeListener(gm);
 		gm.startTicking();
 	}
