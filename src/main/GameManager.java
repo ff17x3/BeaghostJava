@@ -215,4 +215,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 	public Player getPlayer() {
 		return player;
 	}
+
+	public void reset() {
+		main.reset();
+	}
 }

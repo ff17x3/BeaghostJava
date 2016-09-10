@@ -54,8 +54,11 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 					if (attention > MAX_ATTENTION) {
 						attention = MAX_ATTENTION;
 						gm.stopTicking();
-
-						System.exit(0);
+						try {
+							Thread.sleep(300);
+						} catch (InterruptedException ignored) {
+						}
+						gm.reset();
 						JOptionPane.showMessageDialog(null, "Du wurdest entdeckt!", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
 					}
 					setLineToAtLvl();

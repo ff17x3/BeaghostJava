@@ -24,14 +24,13 @@ public class Main implements FrameInitInterface {
 	private DrawFrame frame;
 	private Dimension frameSize = new Dimension(800, 800);
 	private DimensionF mapSize = new DimensionF(500, 500);
-	private GameManager gm;
-	private long[] keyDownTimestamp = new long[4];//w,a,s,d
-	private long[] keyUpTimestamp = new long[4];//w,a,s,d
+	private GameManager gm = null;
+	private long[] keyDownTimestamp = new long[4]; //w,a,s,d
+	private long[] keyUpTimestamp = new long[4]; //w,a,s,d
 	private char[] keys = {'w', 'a', 's', 'd'};
 	private int mouseOnscreenX, mouseOnscreenY;
 
 	public Main() {
-		gm = new GameManager(this, mapSize);
 		frame = new DrawFrame(frameSize, this, gm, mapSize);
 		frame.addScaleChangeListener(gm);
 
@@ -39,6 +38,10 @@ public class Main implements FrameInitInterface {
 		mouseOnscreenX = mp.x;
 		mouseOnscreenY = mp.y;
 
+	}
+
+	public void reset() {
+		gm = new GameManager(this, mapSize);
 		gm.startTicking();
 	}
 
