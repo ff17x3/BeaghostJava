@@ -18,7 +18,6 @@ import java.awt.event.MouseEvent;
 public class Main implements FrameInitInterface {
 	public static void main(String[] args) {
 
-//		System.out.println(Math.atan2(-10, 5));
 		new Main();
 	}
 
