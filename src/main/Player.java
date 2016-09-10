@@ -35,7 +35,7 @@ public class Player extends Entity implements Entity.Tickable {
 
 	// hardcode CONSTANTS
 	private static final float[] ANGLES;
-	private static final float RADIUS = 10;
+	private static final float RADIUS = 10, MOUSE_RADIUS = 50f;
 	private static final float distA, distB, distC;
 
 	static {
@@ -208,14 +208,19 @@ public class Player extends Entity implements Entity.Tickable {
 
 		float newX = add(x, dx, gm.getMapWidth(), 2 * boundingRadius);
 		float newY = add(y, dy, gm.getMapHeight(), 2 * boundingRadius);
-
-		if (Math.signum(x - mouseX) != Math.signum(newX - mouseX))
-			newX = mouseX;
-		if (Math.signum(y - mouseY) != Math.signum(newY - mouseY))
-			newY = mouseY;
-
-		x = newX;
-		y = newY;
+		//old version:
+//		if (Math.signum(x - mouseX) != Math.signum(newX - mouseX))
+//			newX = mouseX;
+//		if (Math.signum(y - mouseY) != Math.signum(newY - mouseY))
+//			newY = mouseY;+
+		if (Math.sqrt(Math.pow(x - mouseX, 2) + Math.pow(y - mouseY, 2)) - MOUSE_RADIUS > 0.00001f) {
+			while (Math.sqrt(Math.pow(newX - mouseX, 2) + Math.pow(newY - mouseY, 2)) < MOUSE_RADIUS) {
+				newX = x + (newX - x) / 2;
+				newY = y + (newY - y) / 2;
+			}
+			x = newX;
+			y = newY;
+		}
 	}
 
 
