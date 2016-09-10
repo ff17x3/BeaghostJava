@@ -222,4 +222,8 @@ public class GameManager implements DrawInferface, ScaleChangeListener { // bla
 	public float getAttention() {
 		return attention;
 	}
+
+	public void setAttention(float attention) {
+		this.attention = attention;
+	}
 }

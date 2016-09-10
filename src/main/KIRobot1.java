@@ -27,7 +27,6 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 	private float angleToTarget;
 
 
-
 	//static:
 	private static float dash[] = {10f, 20f};
 	private static float lineThickness = 1f;
@@ -47,13 +46,12 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 		if (!isDead) {
 			if (state != SLEEP && sees(gm.getPlayer())) {
 				isSeeing = true;
-				float attention = gm.getAttention();
-				if (attention < MAX_ATTENTION) {
+				if (gm.getAttention() < MAX_ATTENTION) {
 //					attention += kIStrength / (1.5 * Math.log(1 + GameManager.entf(this, gm.getPlayer())));
-					attention += kIStrength / (0.07 * GameManager.entf(this, gm.getPlayer()));
+					gm.setAttention((float) (gm.getAttention() + kIStrength / (0.07 * GameManager.entf(this, gm.getPlayer()))));
 //					System.out.println("attention = " + attention);
-					if (attention > MAX_ATTENTION) {
-						attention = MAX_ATTENTION;
+					if (gm.getAttention() > MAX_ATTENTION) {
+						gm.setAttention(MAX_ATTENTION);
 						gm.stopTicking();
 						try {
 							Thread.sleep(500);
@@ -62,7 +60,7 @@ public class KIRobot1 extends Robot implements Entity.Tickable {
 						gm.reset();
 						JOptionPane.showMessageDialog(null, "Du wurdest entdeckt!", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
 					}
-					setLineToAtLvl(attention);
+					setLineToAtLvl(gm.getAttention());
 				}
 			} else {
 				isSeeing = false;
